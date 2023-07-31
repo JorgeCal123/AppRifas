@@ -7,12 +7,15 @@ from config.Conexion import  get_db
 
 from schema.schemas_Talonario import SchemaTalonario, TalonarioUpdate, SchemaTalonarioXBoleta, SchemaPostTalonario
 from schema.schemas_Talonario import SchemaBoleta
+from schema.schema_numero_boletas import SchemaNumeroBoleta
 from model.models import ModelTalonario, ModelBoleta
 import model.models as models
 import schema.schemas as schemas
 
 from app.appBoletas import startCreateBoletas
+import random
 
+from .router_boletas import createBoletas
 routerTalonario = APIRouter()
 
 @routerTalonario.get('/talonario/',response_model=List[SchemaTalonario])
@@ -31,22 +34,35 @@ def show_boletas_Talonario(talonario_id:int,db:Session=Depends(get_db)):
     talonario = db.query(ModelTalonario).filter_by(id=talonario_id).first()
     listaBoletas= []
     for entrada in talonario.boletas:
-        schemaboleta= SchemaBoleta(id = entrada.id, id_talonario= entrada.id_talonario, id_cliente = entrada.id_cliente, id_vendedor=entrada.id_vendedor, qr_code=entrada.qr_code, detalle=entrada.detalle, pagado=entrada.pagado, fecha_venta=entrada.fecha_venta)
+        listanumeros= []
+        for num in entrada.numeros:
+            listanumeros.append(num.numero)
+        schemaboleta= SchemaBoleta(
+            id = entrada.id, 
+            id_talonario= entrada.id_talonario,
+            qr_code=entrada.qr_code,
+            estado_venta=entrada.estado_venta,
+            estado_pagado=entrada.estado_pagado,
+            numeros = listanumeros)
         listaBoletas.append(schemaboleta)
+
     dictschema= {"id":talonario.id, "valor_boleta":talonario.valor_boleta, "celular":talonario.celular, "fecha_Juego":talonario.fecha_Juego, "boletas": listaBoletas}
     schema_talonario= SchemaTalonarioXBoleta(**dictschema)
 
     return schema_talonario
 
+def generate_unique_six_digit_id():
+    db=next(get_db())
+    while True:
+        six_digit_id = random.randint(100000, 9999990)
+        if not db.query(ModelTalonario).filter_by(id=six_digit_id).first():
+            return six_digit_id
+
 @routerTalonario.post('/talonario/',response_model=SchemaPostTalonario)
 def create_Talonario(entrada:SchemaPostTalonario, db:Session=Depends(get_db)):
-    talonario = ModelTalonario(valor_boleta=entrada.valor_boleta, celular=entrada.celular, fecha_Juego=entrada.fecha_Juego, cantidad= entrada.cantidad)
-    db.add(talonario)
-    db.commit()
-    db.refresh(talonario)
-    
-    startCreateBoletas(entrada.cantidad)
+    talonario = ModelTalonario(id = generate_unique_six_digit_id(), valor_boleta=entrada.valor_boleta, celular=entrada.celular, fecha_Juego=entrada.fecha_Juego, cantidad= entrada.cantidad)
 
+    createBoletas(startCreateBoletas(entrada.cantidad), talonario)
     return entrada
 
 

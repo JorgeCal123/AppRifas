@@ -6,10 +6,10 @@ from starlette.responses import RedirectResponse
 from config.Conexion import  get_db
 
 from schema.schemas_boleta import SchemaBoleta, BoletaUpdate
-from model.models import ModelBoleta, ModelTalonario
-import model.models as models
+from model.models import ModelBoleta, ModelTalonario, ModelNumeroBoleta
 import schema.schemas as schemas
-
+import pprint
+import random
 
 routerBoletas = APIRouter()
 
@@ -44,6 +44,30 @@ def update_Boleta(boleta_id:int,entrada:BoletaUpdate,db:Session=Depends(get_db))
     db.commit()
     db.refresh(boleta)
     return boleta
+
+def generate_unique_six_digit_id():
+    db=next(get_db())
+    while True:
+        six_digit_id = random.randint(100000, 9999990)
+        if not db.query(ModelBoleta).filter_by(id=six_digit_id).first():
+            return six_digit_id
+
+
+def createBoletas(boletas, talonario):
+    db=next(get_db())
+    #numeroTalonario = ModelNumeroBoleta()
+    for value in boletas:
+        boleta = ModelBoleta(id = generate_unique_six_digit_id(),qr_code =boletas[value]["qr_code"])
+        talonario.boletas.append(boleta)
+        print(boletas[value]["numeros"])
+        for numero in boletas[value]["numeros"]:
+            numeros = ModelNumeroBoleta(numero= numero, id_boleta=boleta.id)
+            boleta.numeros.append(numeros)
+
+        db.add(talonario)
+        db.commit()
+        db.refresh(talonario)
+    pass
 """
 @routerBoletas.delete('/boletas/{boleta_id}',response_model=schemas.Respuesta)
 def delete_boletas(boleta_id:int,db:Session=Depends(get_db)):
