@@ -15,14 +15,14 @@ class EstadoEnum():
         self.length = length
 
 
-class User(Base):
-    __tablename__ = 'usuario'
+class ModelCliente(Base):
+    __tablename__ = 'cliente'
     id = Column(Integer, primary_key=True, autoincrement=True)
-
-    username = Column(String(20))
     nombre = Column(String(200))
-    rol = Column(String(20))
-    estado = Column(Integer)
+    apellido = Column(String(20))
+    celular = Column(String(13))
+    direccion = Column(String(50))
+    notificacion = Column(Boolean)
 
 
 class ModelTalonario(Base):
