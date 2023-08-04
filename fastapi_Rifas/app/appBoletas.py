@@ -74,8 +74,22 @@ def sacarnumeroList(aleatorio, dict_list):
     serie = serie + str(numero)
     return serie
 
+def clearlistas():
+    cero[0].clear()
+    uno[1].clear()
+    dos[2].clear()
+    tres[3].clear()
+    cuatro[4].clear()
+    cinco[5].clear()
+    seis[6].clear()
+    siete[7].clear()
+    ocho[8].clear()
+    nueve[9].clear()
+
 def startCreateBoletas(cantidad:int):
     if(cantidad > 1000):
         print("La cantidad debe ser menor a 1000")
     crearBoleta(cantidad)
+    clearlistas()
     return talonario
+

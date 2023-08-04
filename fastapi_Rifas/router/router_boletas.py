@@ -12,12 +12,12 @@ import pprint
 import random
 
 routerBoletas = APIRouter()
+"""
 
 @routerBoletas.get("/")
 def main():
     return RedirectResponse(url="/docs/")
 
-"""
 @routerBoletas.get('/boletas/',response_model=List[SchemaBoleta])
 def show_boletas(db:Session=Depends(get_db)):
     usuarios = db.query(ModelBoleta).all()
@@ -53,8 +53,7 @@ def generate_unique_six_digit_id():
             return six_digit_id
 
 
-def createBoletas(boletas, talonario):
-    db=next(get_db())
+def createBoletas(boletas, talonario, db):
     #numeroTalonario = ModelNumeroBoleta()
     for value in boletas:
         boleta = ModelBoleta(id = generate_unique_six_digit_id(),qr_code =boletas[value]["qr_code"])
@@ -63,11 +62,25 @@ def createBoletas(boletas, talonario):
         for numero in boletas[value]["numeros"]:
             numeros = ModelNumeroBoleta(numero= numero, id_boleta=boleta.id)
             boleta.numeros.append(numeros)
+    db.add(talonario)
+    db.commit()
+    db.refresh(talonario)
 
-        db.add(talonario)
-        db.commit()
-        db.refresh(talonario)
-    pass
+def getListaBoletas(talonario: ModelTalonario):
+    listaBoletas= []
+    for entrada in talonario.boletas:
+        listanumeros= []
+        for num in entrada.numeros:
+            listanumeros.append(num.numero)
+        schemaboleta= SchemaBoleta(
+            id = entrada.id, 
+            id_talonario= entrada.id_talonario,
+            qr_code=entrada.qr_code,
+            estado_venta=entrada.estado_venta,
+            estado_pagado=entrada.estado_pagado,
+            numeros = listanumeros)
+        listaBoletas.append(schemaboleta)
+    return listaBoletas
 """
 @routerBoletas.delete('/boletas/{boleta_id}',response_model=schemas.Respuesta)
 def delete_boletas(boleta_id:int,db:Session=Depends(get_db)):

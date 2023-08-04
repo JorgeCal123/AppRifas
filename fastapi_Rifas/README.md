@@ -1,5 +1,7 @@
 # CRUD CON FASTAPI, SQLALCHEMY Y MYSQL
 
+
+
 ## PASOS PARA INSTALAR
 1. Crear un ambiente virtual con Python3
 ```
@@ -16,6 +18,16 @@ source env/bin/activate
 pip install -r requirements.txt
 
 ```
+4. forma 2 para instalar
+pip install mysql-connector-python
+pip install mysqlclient
+pip install sqlalchemy
+pip install fastapi uvicorn
+## virtualEnv desde python (forma 2 usar virtualenv)
+1. crear el ambiente virtual
+python -m venv envfastapi
+2. ejecutar ambiente arvitual
+.\envfastapi\Scripts\activate
 
 ## DESPLEGANDO EL AMBIENTE
 ```
