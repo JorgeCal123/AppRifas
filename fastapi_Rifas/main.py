@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from config.Conexion import engine
+from config.conexion import engine
 from router.router_boletas import routerBoletas
 from router.router_talonario import routerTalonario
 import uvicorn

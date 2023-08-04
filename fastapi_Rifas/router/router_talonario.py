@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse
-from config.Conexion import  get_db
+from config.conexion import  get_db
 
 from schema.schemas_Talonario import SchemaTalonario, TalonarioUpdate, SchemaTalonarioXBoleta, SchemaPostTalonario
 from schema.schemas_Talonario import SchemaBoleta
