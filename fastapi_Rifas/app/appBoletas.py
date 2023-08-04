@@ -28,8 +28,19 @@ def llenarListas():
         siete[7].append(x)
         ocho[8].append(x)
         nueve[9].append(x)
-    print("llenado")
 
+"""
+{
+      "id": 0,
+      "id_talonario": 0,
+      "id_cliente": 0,
+      "id_vendedor": 0,
+      "qr_code": "string",
+      "detalle": "string",
+      "pagado": true,
+      "fecha_venta": "2023-07-30T18:50:40.629Z"
+    }
+"""
 def crearBoleta(cantidadboletas):
     llenarListas()
     global talonario, uno, dos, tres, cuatro, cinco, seis, siete, ocho, nueve, cero
@@ -38,9 +49,6 @@ def crearBoleta(cantidadboletas):
         boleta = {}
         numeros.clear()
         boleta["qr_code"] = "xxxx - xxxx -xxxx"
-        boleta["detalle"] = "Premio de 1'000.000 Juega el 23/09/2023"
-        boleta["pagado"] = False
-        boleta["fecha"] = " / / /"
         numeros.append(sacarnumeroList(random.randint(0, len(cuatro[4]) -1 ), cuatro))
         numeros.append(sacarnumeroList(random.randint(0, len(dos[2]) -1 ), dos))
         numeros.append(sacarnumeroList(random.randint(0, len(uno[1]) -1 ), uno))
@@ -66,8 +74,22 @@ def sacarnumeroList(aleatorio, dict_list):
     serie = serie + str(numero)
     return serie
 
+def clearlistas():
+    cero[0].clear()
+    uno[1].clear()
+    dos[2].clear()
+    tres[3].clear()
+    cuatro[4].clear()
+    cinco[5].clear()
+    seis[6].clear()
+    siete[7].clear()
+    ocho[8].clear()
+    nueve[9].clear()
+
 def startCreateBoletas(cantidad:int):
     if(cantidad > 1000):
         print("La cantidad debe ser menor a 1000")
     crearBoleta(cantidad)
-    pprint.pprint(talonario)
+    clearlistas()
+    return talonario
+
