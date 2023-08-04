@@ -1,12 +1,9 @@
 from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
-
 from starlette.responses import RedirectResponse
 from config.conexion import  get_db
-
-
-from schema.schemas_Talonario import SchemaTalonario, TalonarioUpdate, SchemaTalonarioXBoleta, SchemaPostTalonario
+from schema.schemas_Talonario import SchemaTalonario,TalonarioUpdate, SchemaTalonarioXBoleta, SchemaPostTalonario
 from schema.schema_premios import SchemaPremios
 from model.models import ModelTalonario, ModelPremio
 import schema.schemas as schemas
@@ -52,7 +49,8 @@ def generate_unique_six_digit_id():
         if not db.query(ModelTalonario).filter_by(id=six_digit_id).first():
             return six_digit_id
 
-@routerTalonario.post('/talonario/',response_model=SchemaPostTalonario)
+@routerTalonario.post('/talonario/',
+                      response_model=SchemaPostTalonario)
 def create_Talonario(entrada:SchemaPostTalonario, db:Session=Depends(get_db)):
     talonario = ModelTalonario(id = generate_unique_six_digit_id(), valor_boleta=entrada.valor_boleta, celular=entrada.celular, cantidad= entrada.cantidad)
 
