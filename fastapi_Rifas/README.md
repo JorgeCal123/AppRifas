@@ -15,7 +15,7 @@ source env/bin/activate
 ```
 3. Instalar las librerías necesarias que se encuentran en el archivo requirements.txt
 ```
-pip install -r requirements.txt
+pip install -r requiritements.txt
 
 ```
 4. forma 2 para instalar

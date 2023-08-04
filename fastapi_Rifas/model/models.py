@@ -84,6 +84,3 @@ class ModelGanador(Base):
 
     id_premio = Column(Integer, ForeignKey("Premio.id"))
     premio = relationship("ModelPremio", back_populates='ganador', uselist=False)
-
-
-

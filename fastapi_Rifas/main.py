@@ -9,7 +9,9 @@ import model.models as models
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
+
 app.include_router(routerTalonario)
+
 app.include_router(routerBoletas)
 app.include_router(routerGanadoras)
 app.include_router(routerPremios)

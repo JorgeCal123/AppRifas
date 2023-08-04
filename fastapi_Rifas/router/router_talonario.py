@@ -17,6 +17,8 @@ from typing import List
 import random
 
 from .router_boletas import createBoletas, getListaBoletas
+
+
 routerTalonario = APIRouter()
 
 @routerTalonario.get('/talonario/',response_model=List[SchemaTalonario])
