@@ -3,7 +3,7 @@ from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from config.conexion import  get_db
 
-from schema.schemas_boleta import SchemaBoleta, BoletaActualizar
+from schema.schema_boleta import SchemaBoleta, BoletaActualizar
 from modelo.modelos import Boleta, Talonario, NumeroBoleta, id_seis_digitos
 import random
 

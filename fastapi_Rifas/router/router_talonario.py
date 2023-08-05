@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from config.conexion import  get_db
 
-from schema.schemas_talonario import SchemaTalonario, SchemaTalonarioPut, SchemaTalonarioXBoleta, SchemaTalonarioPost
+from schema.schema_talonario import SchemaTalonario, SchemaTalonarioPut, SchemaTalonarioXBoleta, SchemaTalonarioPost
 from schema.schema_premios import SchemaPremios
 from modelo.modelos import Talonario, Premio, id_seis_digitos
 import schema.schemas as schemas

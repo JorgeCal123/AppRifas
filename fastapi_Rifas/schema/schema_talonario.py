@@ -1,7 +1,7 @@
 from typing import List, Optional
 from pydantic import BaseModel
 from datetime import datetime
-from schema.schemas_boleta import SchemaBoleta
+from schema.schema_boleta import SchemaBoleta
 from schema.schema_premios import SchemaPremios
 
 class SchemaTalonario(BaseModel):

@@ -4,7 +4,7 @@ from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from config.conexion import  get_db
 
-from schema.schemas_cliente import SchemaCliente, SchemaClientePost, SchemaClienteGet
+from schema.schema_cliente import SchemaCliente, SchemaClientePost, SchemaClienteGet
 from modelo.modelos import Cliente
 
 routerCliente = APIRouter()
