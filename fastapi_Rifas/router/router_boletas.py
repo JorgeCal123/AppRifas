@@ -46,13 +46,30 @@ def actualizar_Boleta(boleta_id:int, entrada:BoletaActualizar, db:Session=Depend
 
 
 def guardarBoletas(boletas, talonario, db):
+    # por cada numero de boletas creo una instancia de Boletas y le ingreso la informacion
     for boleta in boletas:
         boleta = Boleta(id = id_seis_digitos(),qr_code =boletas[boleta]["qr_code"])
+        # conmo tiene una relaionship se trata como una lista
+        # un talonario tiene muchas boletas
         talonario.boletas.append(boleta)
 
+        # De igual forma una boleta tiene muchos numeros de boletas,
+        # se crea la instancia de NumeroBoleta y se le mete la informacion
         for numero in boletas[boleta]["numeros"]:
             numeros = NumeroBoleta(numero= numero, id_boleta=boleta.id)
+            # Una boleta tiene muchos numeros
             boleta.numeros.append(numeros)
+
+    # Se guarda en este caso solo talonario porque con el simple hecho de tener
+    # una relationship ya todo queda empaquetado o relacionado (al hacer append)
+
+    # un talonario tiene muchas boletas,
+    # y una boleta tiene muchos numeros de boleta
+
+    # Talonario -> Boleta -> NumeroBoleta
+    
+    # Talonario.boletas.append(Boleta)
+    # Boleta.numerosBoletas.append(NumeroBoleta)
     db.add(talonario)
     db.commit()
     db.refresh(talonario)
