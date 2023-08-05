@@ -29,6 +29,7 @@ def show_info_juegos(db:Session=Depends(get_db)):
         strpremios.append(listapremios[actual].premio)
         numganadores.append(listapremios[actual].ganador.numeroGanador)
         info_juegos=Schema_info_Juegos(dia=listapremios[actual].fecha_Juego.strftime("%A"), fecha= listapremios[actual].fecha_Juego, premio=strpremios, ganador = numganadores)
+        
         for siguiente in range(actual + 1, len(listapremios) ):
             fecha2 = listapremios[siguiente].fecha_Juego.strftime("%Y-%m-%d")
             if fecha1 == fecha2:

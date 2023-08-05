@@ -33,7 +33,8 @@ class ModelTalonario(Base):
     cantidad = Column(Integer)
 
     boletas = relationship("ModelBoleta", back_populates='talonario', cascade="all, delete-orphan")
-    premios = relationship("ModelPremio", back_populates='talonario', cascade="all, delete-orphan")
+    premios = relationship("ModelPremio",
+                           back_populates='talonario', cascade="all, delete-orphan")
 
 
 class ModelBoleta(Base):
