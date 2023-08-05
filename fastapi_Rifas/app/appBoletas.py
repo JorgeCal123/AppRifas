@@ -41,7 +41,7 @@ def llenarListas():
       "fecha_venta": "2023-07-30T18:50:40.629Z"
     }
 """
-def crearBoleta(cantidadboletas):
+def crearNumeroBoleta(cantidadboletas):
     llenarListas()
     global talonario, uno, dos, tres, cuatro, cinco, seis, siete, ocho, nueve, cero
     for x in range(cantidadboletas):
@@ -74,7 +74,7 @@ def sacarnumeroList(aleatorio, dict_list):
     serie = serie + str(numero)
     return serie
 
-def clearlistas():
+def limpiarListas():
     cero[0].clear()
     uno[1].clear()
     dos[2].clear()
@@ -89,7 +89,7 @@ def clearlistas():
 def crearBoletas(cantidad:int):
     if(cantidad > 1000):
         print("La cantidad debe ser menor a 1000")
-    crearBoleta(cantidad)
-    clearlistas()
+    crearNumeroBoleta(cantidad)
+    limpiarListas()
     return talonario
 
