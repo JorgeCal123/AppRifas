@@ -6,37 +6,37 @@ from schema.schema_premios import *
 from sqlalchemy.orm import Session
 
 from config.conexion import get_db
-from model.models import ModelTalonario
+from modelo.modelos import Talonario
 
 
 routerPremios = APIRouter()
 
 
-@routerPremios.get("/juegos",response_model=List[Schema_info_Juegos])
-def show_info_juegos(db:Session=Depends(get_db)):
-    talonarios = db.query(ModelTalonario).all()
-    listapremios=[] 
+@routerPremios.get("/juegos",response_model=List[SchemaInfoJuegos])
+def mostrar_info_juegos(db:Session=Depends(get_db)):
+    talonarios = db.query(Talonario).all()
+    lista_premios=[] 
     for talonario in talonarios:
         for premio in talonario.premios:
-            listapremios.append(premio)
+            lista_premios.append(premio)
 
     schem_info_juegos = []
 
-    for actual in range(len(listapremios)):
-        strpremios= []
-        numganadores= []
-        fecha1 = listapremios[actual].fecha_Juego.strftime("%Y-%m-%d")
-        strpremios.append(listapremios[actual].premio)
-        numganadores.append(listapremios[actual].ganador.numeroGanador)
-        info_juegos=Schema_info_Juegos(dia=listapremios[actual].fecha_Juego.strftime("%A"), fecha= listapremios[actual].fecha_Juego, premio=strpremios, ganador = numganadores)
+    for indice_actual in range(len(lista_premios)):
+        list_nombre_premios= []
+        num_ganadores= []
+        fecha1 = lista_premios[indice_actual].fecha_Juego.strftime("%Y-%m-%d")
+        list_nombre_premios.append(lista_premios[indice_actual].premio)
+        num_ganadores.append(lista_premios[indice_actual].ganador.numeroGanador)
+        info_juegos=SchemaInfoJuegos(dia=lista_premios[indice_actual].fecha_Juego.strftime("%A"), fecha= lista_premios[indice_actual].fecha_Juego, premio=list_nombre_premios, ganador = num_ganadores)
         
-        for siguiente in range(actual + 1, len(listapremios) ):
-            fecha2 = listapremios[siguiente].fecha_Juego.strftime("%Y-%m-%d")
+        for indice_siguiente in range(indice_actual + 1, len(lista_premios) ):
+            fecha2 = lista_premios[indice_siguiente].fecha_Juego.strftime("%Y-%m-%d")
             if fecha1 == fecha2:
-                strpremios.append(listapremios[actual].premio)
-                numganadores.append(listapremios[actual].ganador.numeroGanador)
-                #listapremios.pop(siguiente)
-        info_juegos.premio = strpremios
-        info_juegos.ganador= numganadores
+                list_nombre_premios.append(lista_premios[indice_actual].premio)
+                num_ganadores.append(lista_premios[indice_actual].ganador.numeroGanador)
+                #lista_premios.pop(indice_siguiente)
+        info_juegos.premio = list_nombre_premios
+        info_juegos.ganador= num_ganadores
         schem_info_juegos.append(info_juegos)
     return schem_info_juegos

@@ -11,18 +11,18 @@ class SchemaPremios(BaseModel):
     class Config:
         orm_mode =True
 
-class Schema_info_Juegos(BaseModel):
+class SchemaInfoJuegos(BaseModel):
     dia: str
     premio: List[str]
     fecha: datetime
     ganador: Optional[List[int]]
 
 
-class Schema_ganador(BaseModel):
+class SchemaGanador(BaseModel):
     fecha: datetime
     premio: str
     boleta_ganadora: int
 
-class Schema_basic_ganadores(BaseModel):
-    ganadores: List[Schema_ganador]
+class SchemaBasicGanadores(BaseModel):
+    ganadores: List[SchemaGanador]
 

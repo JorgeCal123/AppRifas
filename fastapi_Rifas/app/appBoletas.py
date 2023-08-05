@@ -86,7 +86,7 @@ def clearlistas():
     ocho[8].clear()
     nueve[9].clear()
 
-def startCreateBoletas(cantidad:int):
+def crearBoletas(cantidad:int):
     if(cantidad > 1000):
         print("La cantidad debe ser menor a 1000")
     crearBoleta(cantidad)

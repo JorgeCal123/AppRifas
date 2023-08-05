@@ -12,7 +12,7 @@ class SchemaTalonario(BaseModel):
     class Config:
         orm_mode =True
 
-class SchemaPostTalonario(BaseModel):
+class SchemaTalonarioPost(BaseModel):
     valor_boleta: int
     celular: str
     cantidad: int
@@ -35,7 +35,7 @@ class SchemaTalonarioXBoleta(BaseModel):
 
 
 
-class TalonarioUpdate(BaseModel):   
+class SchemaTalonarioPut(BaseModel):   
     valor_boleta: int
     celular: str
     #fecha_Juego: datetime

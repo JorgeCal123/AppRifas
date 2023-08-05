@@ -31,7 +31,7 @@ class SchemaTolonarioBoleta(BaseModel):
     fecha_venta: datetime
 """
 
-class BoletaUpdate(BaseModel):   
+class BoletaActualizar(BaseModel): 
     id_vendedor: Optional[int]
     id_cliente: Optional[int]
     qr_code: str

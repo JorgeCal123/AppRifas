@@ -4,7 +4,7 @@ class SchemaCliente(BaseModel):
   mensaje: str
   
 class SchemaClienteGet(BaseModel):
-    
+
     id : int
     nombre : str
     apellido : str
