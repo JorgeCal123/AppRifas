@@ -54,10 +54,10 @@ def generate_unique_six_digit_id():
 def create_Talonario(entrada:SchemaPostTalonario, db:Session=Depends(get_db)):
     talonario = ModelTalonario(id = generate_unique_six_digit_id(), valor_boleta=entrada.valor_boleta, celular=entrada.celular, cantidad= entrada.cantidad)
 
-    
-    for prem in entrada.premios:
-        premio = ModelPremio(premio = prem.premio, imagen= prem.imagen, fecha_Juego=prem.fecha_Juego, id_talonario=talonario.id)
-        talonario.premios.append(premio)
+
+    for premio in entrada.premios:
+        nuevo_premio = ModelPremio(premio = premio.premio, imagen= premio.imagen, fecha_Juego=premio.fecha_Juego, id_talonario=talonario.id)
+        talonario.premios.append(nuevo_premio)
 
     createBoletas(startCreateBoletas(entrada.cantidad), talonario, db)
     return entrada
