@@ -14,6 +14,21 @@ routerPremios = APIRouter()
 
 @routerPremios.get("/juegos",response_model=List[SchemaInfoJuegos])
 def mostrar_info_juegos(db:Session=Depends(get_db)):
+  
+    """
+  select premio, fecha_juego, numero_ganador
+  from Premios
+  join Ganador
+  on premios.id = ganador.premio_id
+  where fecha_juego between fecha inicial y fecha final 
+  
+  query = db.query(Premios.premio, Premios.fecha_juego, Premios.numero_ganador).\
+    join(Ganador, Premios.id == Ganador.premio_id).\
+    filter(and_(Premios.fecha_juego >= fecha_inicial, Premios.fecha_juego <= fecha_final))
+
+# Obtener los resultados
+resultados = query.all()
+"""
     talonarios = db.query(Talonario).all()
     lista_premios=[] 
     for talonario in talonarios:

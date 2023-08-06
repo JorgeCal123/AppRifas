@@ -62,7 +62,7 @@ class Premio(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     premio = Column(String(255))
     imagen = Column(String(255), nullable=True)
-    fecha_Juego = Column(DateTime)
+    fecha_juego = Column(DateTime)
 
     id_talonario = Column(Integer, ForeignKey("talonarios.id", ondelete="CASCADE"))    
     talonario = relationship("Talonario", back_populates='premios')
@@ -75,7 +75,7 @@ class Ganador(Base):
     NO_VENDIDO = "No vendido"
     __tablename__ = "Ganador"
     id = Column(Integer, primary_key=True)
-    numeroGanador = Column(Integer)
+    numero_ganador = Column(Integer)
     estado = Column(String(50), default=PENDIENTE)
 
 

@@ -16,7 +16,14 @@ class SchemaInfoJuegos(BaseModel):
     premio: List[str]
     fecha: datetime
     ganador: Optional[List[int]]
-
+"""
+{
+  dia: lunes // Premio
+  premio: [20000, 10000, 50000] // Premio
+  fecha: 2023/08/18 // Premio
+  ganador: [2304, 2556, 1245] //Ganador
+} 
+"""
 
 class SchemaGanador(BaseModel):
     fecha: datetime
