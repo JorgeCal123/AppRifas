@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
-from config.conexion import Base
+from config.conexion import Base, get_db
 
 from sqlalchemy.schema import ForeignKey
 from sqlalchemy.orm import relationship
-
+import random
 def id_seis_digitos():
     db=next(get_db())
     while True:

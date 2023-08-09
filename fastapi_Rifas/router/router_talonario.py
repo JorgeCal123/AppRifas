@@ -57,20 +57,19 @@ def crear_Talonario(entrada:SchemaTalonarioPost, db:Session=Depends(get_db)):
     # De la lista de schemas de premios recorro cada uno
     for premio in entrada.premios:
         # Saco esa informacion y creo la instacia de premios
-        nuevo_premio = Premio(premio = premio.premio, imagen= premio.imagen, fecha_Juego=premio.fecha_Juego, id_talonario=talonario.id)
+        nuevo_premio = Premio(premio = premio.premio, imagen= premio.imagen, fecha_juego=premio.fecha_Juego, id_talonario=talonario.id)
         talonario.premios.append(nuevo_premio)
     """
         Llamo metodo crearBoletas que me entrega un diccionario que contiene una lista de numeros
         y el código qr
     """
-    numeros_boleta = crearBoletas(entrada.cantidad)
     """
     llamo el metodo guardar boleta que me recibe por parametro:
         numeros_boleta: el metodo de arriba
         talonria: La instancia del talonario (linea 55)
         db: la sesion en la que estamos actualmente en la base de datos
     """
-    guardarBoletas(numeros_boleta, talonario, db)
+    guardarBoletas(crearBoletas(entrada.cantidad), talonario, db)
     return entrada
 
 
