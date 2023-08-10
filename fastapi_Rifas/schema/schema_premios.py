@@ -11,11 +11,16 @@ class SchemaPremios(BaseModel):
     class Config:
         orm_mode =True
 
+  
+class SchemaInfoGanador(BaseModel):
+    premio: str
+    ganador: Optional [int]
+    
+
 class SchemaInfoJuegos(BaseModel):
     dia: str
-    premio: List[str]
+    premios: List[SchemaInfoGanador]
     fecha: datetime
-    ganador: Optional[List[int]]
 """
 {
   dia: lunes // Premio
