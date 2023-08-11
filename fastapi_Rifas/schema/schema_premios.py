@@ -14,13 +14,13 @@ class SchemaPremios(BaseModel):
   
 class SchemaInfoGanador(BaseModel):
     premio: str
-    ganador: Optional [int]
+    ganador: Optional[int]
     
 
 class SchemaInfoJuegos(BaseModel):
     dia: str
+    fecha: str
     premios: List[SchemaInfoGanador]
-    fecha: datetime
 """
 {
   dia: lunes // Premio
@@ -30,11 +30,10 @@ class SchemaInfoJuegos(BaseModel):
 } 
 """
 
-class SchemaGanador(BaseModel):
-    fecha: datetime
+class SchemaJuegosPasados(BaseModel):
+    fecha: str
     premio: str
     boleta_ganadora: int
 
-class SchemaBasicGanadores(BaseModel):
-    ganadores: List[SchemaGanador]
+
 

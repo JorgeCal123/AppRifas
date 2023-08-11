@@ -31,4 +31,3 @@ def crear_cliente(cliente:SchemaClientePost, db: Session = Depends(get_db)):
   db.commit()
   db.refresh(nuevo_cliente)
   return respuesta
-  

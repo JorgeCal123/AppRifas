@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from modelo.modelos import Ganador
 routerGanadoras = APIRouter()
 
-
+"""
 @routerGanadoras.get("/ganadores", response_model=List[SchemaBasicGanadores])
 def mostarGanadores(db:Session = Depends(get_db)):
     ganadores = db.query(Ganador).all()
@@ -20,4 +20,4 @@ def mostarGanadores(db:Session = Depends(get_db)):
     basic_ganadores= SchemaBasicGanadores(ganadores=lista_ganadores)
     return basic_ganadores
 
-
+"""
