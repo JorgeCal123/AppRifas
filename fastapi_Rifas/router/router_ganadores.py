@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter
 from fastapi.params import Depends
-from schema.schema_premios import *
+from schema.schema_ganador import *
 from config.conexion import get_db
 from sqlalchemy.orm import Session
 
@@ -21,3 +21,10 @@ def mostarGanadores(db:Session = Depends(get_db)):
     return basic_ganadores
 
 """
+@routerGanadoras.post('/ganadores/{talonario_id}',response_model=SchemaGanador)
+def registrar_numero_ganador(talonario_id:int,entrada:SchemaGanadorPost,db:Session=Depends(get_db)):
+  
+
+  
+    return 
+  

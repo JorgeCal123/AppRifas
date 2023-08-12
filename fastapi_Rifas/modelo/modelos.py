@@ -20,6 +20,11 @@ class Cliente(Base):
     celular = Column(String(13))
     direccion = Column(String(50))
     notificacion = Column(Boolean)
+    
+    boletas = relationship("Boleta", back_populates='cliente', cascade="all, delete-orphan")
+    
+    ganador =  relationship("Ganador", back_populates='cliente', cascade="all, delete-orphan")
+    
 
 
 class Talonario(Base):
@@ -37,8 +42,8 @@ class Boleta(Base):
     __tablename__ = 'boletas'
     id = Column(Integer, primary_key=True, autoincrement=True)
     qr_code = Column(String(255))
-    estado_venta = Column(Boolean, nullable=True)
-    estado_pagado = Column(Boolean, nullable=True)
+    estado_venta = Column(Boolean, nullable=True, default=False)
+    estado_pagado = Column(Boolean, nullable=True, default=False)
     fecha_venta = Column(DateTime, nullable=True)
 
     id_talonario = Column(Integer, ForeignKey("talonarios.id", ondelete="CASCADE"))
@@ -47,11 +52,17 @@ class Boleta(Base):
     numeros = relationship("NumeroBoleta", back_populates='boleta', cascade="all, delete-orphan")
 
     ganador = relationship("Ganador", back_populates="boleta", uselist=False)
+    
+    id_cliente = Column(Integer, ForeignKey("clientes.id", ondelete="CASCADE"))
+    cliente = relationship("Cliente", back_populates='boletas')
+
+    id_vendedor = Column(Integer, ForeignKey("vendedores.id", ondelete="CASCADE"))
+    vendedor = relationship("Vendedor", back_populates='boletas')
 
 
 class NumeroBoleta(Base):
     __tablename__ = 'Numero_boletas'
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(String, primary_key=True, autoincrement=True)
     numero = Column(Integer)
 
     id_boleta = Column(Integer, ForeignKey("boletas.id", ondelete="CASCADE"))
@@ -59,7 +70,7 @@ class NumeroBoleta(Base):
 
 class Premio(Base):
     __tablename__ = 'premios'
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(String, primary_key=True, autoincrement=True)
     premio = Column(String(255))
     imagen = Column(String(255), nullable=True)
     fecha_juego = Column(DateTime)
@@ -74,7 +85,7 @@ class Ganador(Base):
     PENDIENTE = "pendiente"
     NO_VENDIDO = "No vendido"
     __tablename__ = "Ganador"
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True, autoincrement=True)
     numero_ganador = Column(Integer)
     estado = Column(String(50), default=PENDIENTE)
 
@@ -84,3 +95,18 @@ class Ganador(Base):
 
     id_premio = Column(Integer, ForeignKey("premios.id"))
     premio = relationship("Premio", back_populates='ganador', uselist=False)
+    
+    id_cliente = Column(Integer, ForeignKey("clientes.id"))
+    cliente = relationship("Cliente", back_populates='ganador', uselist=False)
+    
+    
+class Vendedor(Base):
+    __tablename__ = 'vendedores'
+    id = Column(String, primary_key=True, autoincrement=True)
+    nombre = Column(String(200))
+    apellido = Column(String(20))
+    celular = Column(String(13))
+    correo = Column(String(100))
+    
+    boletas = relationship("Boleta", back_populates='vendedor', cascade="all, delete-orphan")
+  
