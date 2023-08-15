@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Sequence, BigInteger 
 from config.conexion import Base, get_db
 
 from sqlalchemy.schema import ForeignKey
@@ -41,6 +41,8 @@ class Talonario(Base):
 class Boleta(Base):
     __tablename__ = 'boletas'
     id = Column(Integer, primary_key=True, autoincrement=True)
+    consecutiva_id = Column(BigInteger, Sequence("Boleta_incremento"),
+                            server_default=Sequence("Boleta_incremento").next_value())
     qr_code = Column(String(255))
     estado_venta = Column(Boolean, nullable=True, default=False)
     estado_pagado = Column(Boolean, nullable=True, default=False)
@@ -62,7 +64,7 @@ class Boleta(Base):
 
 class NumeroBoleta(Base):
     __tablename__ = 'Numero_boletas'
-    id = Column(String, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     numero = Column(Integer)
 
     id_boleta = Column(Integer, ForeignKey("boletas.id", ondelete="CASCADE"))
@@ -70,7 +72,7 @@ class NumeroBoleta(Base):
 
 class Premio(Base):
     __tablename__ = 'premios'
-    id = Column(String, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     premio = Column(String(255))
     imagen = Column(String(255), nullable=True)
     fecha_juego = Column(DateTime)
@@ -85,7 +87,7 @@ class Ganador(Base):
     PENDIENTE = "pendiente"
     NO_VENDIDO = "No vendido"
     __tablename__ = "Ganador"
-    id = Column(String, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     numero_ganador = Column(Integer)
     estado = Column(String(50), default=PENDIENTE)
 
@@ -102,7 +104,7 @@ class Ganador(Base):
     
 class Vendedor(Base):
     __tablename__ = 'vendedores'
-    id = Column(String, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String(200))
     apellido = Column(String(20))
     celular = Column(String(13))

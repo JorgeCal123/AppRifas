@@ -5,6 +5,7 @@ from router.router_talonario import routerTalonario
 from router.router_ganadores import routerGanadoras
 from router.router_premios import routerPremios
 from router.router_cliente import routerCliente
+from router.router_vendedor import routerVendedor
 import uvicorn
 import modelo.modelos as models
 import datetime
@@ -17,6 +18,7 @@ app.include_router(routerBoletas)
 app.include_router(routerGanadoras)
 app.include_router(routerPremios)
 app.include_router(routerCliente)
+app.include_router(routerVendedor)
 
 
 if __name__== "__main__":

@@ -13,7 +13,7 @@ class SchemaClienteGet(BaseModel):
     notificacion : bool
   
 class SchemaClientePost(BaseModel):
-   
+    
     nombre : str
     apellido : str
     celular : str
