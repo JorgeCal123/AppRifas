@@ -19,3 +19,6 @@ class SchemaVendedorGet(BaseModel):
     apellido : str
     celular : str
     correo : str
+    
+class SchemaAsignarBoletas(BaseModel):
+    id_talonario : int

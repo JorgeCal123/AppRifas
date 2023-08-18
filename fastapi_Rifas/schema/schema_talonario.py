@@ -4,6 +4,7 @@ from datetime import datetime
 from schema.schema_boleta import SchemaBoleta
 from schema.schema_premios import SchemaPremios
 
+
 class SchemaTalonario(BaseModel):
     id: int
     valor_boleta: int
@@ -43,7 +44,12 @@ class SchemaTalonarioPut(BaseModel):
     class Config:
         orm_mode =True
 
+class SchemaInfopremio(BaseModel):
+    premio: str
+    fecha: str
    
+class SchemaTalonarioXpremio(BaseModel):   
+    id_talonario: int
+    premios: List[SchemaInfopremio]
 
 
-   
