@@ -2,11 +2,9 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from config.conexion import  get_db
-
 from schema.schema_talonario import *
-
 from modelo.modelos import *
-import random
+
 
 
 routerAdmin= APIRouter()
