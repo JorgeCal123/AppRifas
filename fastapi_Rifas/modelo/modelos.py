@@ -41,8 +41,7 @@ class Talonario(Base):
 class Boleta(Base):
     __tablename__ = 'boletas'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    consecutiva_id = Column(BigInteger, Sequence("Boleta_incremento"),
-                            server_default=Sequence("Boleta_incremento").next_value())
+    consecutiva_id = Column(Integer)                          
     qr_code = Column(String(255))
     estado_venta = Column(Boolean, nullable=True, default=False)
     estado_pagado = Column(Boolean, nullable=True, default=False)

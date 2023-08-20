@@ -51,5 +51,14 @@ class SchemaInfopremio(BaseModel):
 class SchemaTalonarioXpremio(BaseModel):   
     id_talonario: int
     premios: List[SchemaInfopremio]
+    
+class SchemaInfoVendedor(BaseModel):
+  id : int
+  nombre : str
 
+    
+class SchemaTalonarioXvendedor(BaseModel):
+    id_talonario: int
+    cantidad : int
+    vendedores : list[SchemaInfoVendedor]
 

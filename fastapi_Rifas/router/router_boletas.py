@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from config.conexion import  get_db
-
 from schema.schema_boleta import SchemaBoleta, BoletaActualizar
 from modelo.modelos import Boleta, Talonario, NumeroBoleta, id_seis_digitos
 import random
@@ -45,10 +44,23 @@ def actualizar_Boleta(boleta_id:int, entrada:BoletaActualizar, db:Session=Depend
     return boleta
 
 
+def id_consecutivo(id_talonario):
+  db=next(get_db())
+  cantidad = db.query(Boleta).filter_by(id_talonario=id_talonario).count()
+  return cantidad + 1
+
+
 def guardarBoletas(boletas, talonario, db):
     # por cada numero de boletas creo una instancia de Boletas y le ingreso la informacion
+    db.add(talonario)
+    db.commit()
+    db.refresh(talonario)
     for boleta in boletas:
-        nueva_boleta = Boleta(id = id_seis_digitos(),qr_code =boletas[boleta]["qr_code"])
+        nueva_boleta = Boleta(id = id_seis_digitos(),consecutiva_id = id_consecutivo(talonario.id), qr_code =boletas[boleta]["qr_code"])
+        db.add(nueva_boleta)
+        db.commit()
+        db.refresh(nueva_boleta)
+
         # conmo tiene una relaionship se trata como una lista
         # un talonario tiene muchas boletas
         talonario.boletas.append(nueva_boleta)

@@ -1,0 +1,4 @@
+* asignar boletas a los vendedores
+* vender boletas
+* asignar boleta a un cliente.
+* mostar las boletas de un cliente

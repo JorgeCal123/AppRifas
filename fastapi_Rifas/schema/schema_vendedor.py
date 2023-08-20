@@ -22,3 +22,14 @@ class SchemaVendedorGet(BaseModel):
     
 class SchemaAsignarBoletas(BaseModel):
     id_talonario : int
+
+
+class SchemaCantidadBoletasVendedor(BaseModel):
+    id_vendedor : int
+    cantidad : int
+    
+
+class SchemaBoletasAsignadas(BaseModel):
+    nombre : str
+    rango_inicial : int
+    rango_final: int
