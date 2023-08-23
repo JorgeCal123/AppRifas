@@ -1,0 +1,18 @@
+{
+  "valor_boleta": 2000,
+  "celular": "3218829324",
+  "cantidad": 14,
+  "premios": [
+    {
+      "premio": "Carro",
+      "imagen": "carro.png",
+      "fecha_juego": "2023-08-28T18:56:04.304Z"
+    },
+    {
+      "premio": "moto",
+      "imagen": "moto.png",
+      "fecha_juego": "2023-08-30T18:56:04.304Z"
+    }
+
+  ]
+}

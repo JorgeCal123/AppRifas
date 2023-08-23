@@ -1,16 +1,19 @@
 from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import asc
 from config.conexion import  get_db
 from schema.schema_talonario import *
+from schema.schema_vendedor import *
 from modelo.modelos import *
+
 
 
 
 routerAdmin= APIRouter()
 
 
-@routerAdmin.get('/admin/opcionestalonario',response_model=list[SchemaTalonarioXpremio])
+@routerAdmin.get('/admin/opcionestalonario',response_model=List[SchemaTalonarioXpremio])
 def opciones_talonarios(db:Session=Depends(get_db)):
   
   """
@@ -61,3 +64,37 @@ def talonarios_premio(info_premio):
       lista_nueva_premios.append(juego)
       dict_premio[premio.id] = lista_nueva_premios
   return dict_premio
+
+
+
+@routerAdmin.get('/admin/boletasvendedor/{id_talonario}', response_model= SchemaTalonarioXvendedor)
+def talonario_vendedor(id_talonario:int, db:Session=Depends(get_db)): 
+
+  
+  datos_talonario = db.query(Talonario.id, Talonario.cantidad).filter_by(id = id_talonario).first()
+  print(datos_talonario)
+  
+  vendedores = db.query(Vendedor.id, Vendedor.nombre, Vendedor.apellido)
+  lista_vendedores = []
+  for vendedor in vendedores:
+    nombre = vendedor.nombre + ' '+ vendedor.apellido
+    schema_vendedor = SchemaInfoVendedor(id = vendedor.id, nombre = nombre)
+    lista_vendedores.append(schema_vendedor)
+  
+  vendedor = SchemaTalonarioXvendedor(id_talonario = datos_talonario.id, cantidad = datos_talonario.cantidad, vendedores =  lista_vendedores)
+  
+  return vendedor
+
+
+
+@routerAdmin.patch('/admin/cantidadboletasvendedor/{id_talonario}', response_model= SchemaBoletasAsignadas)
+def Boletas_asignadas(id_talonario:int, entrada = List[SchemaCantidadBoletasVendedor], db:Session=Depends(get_db)): 
+
+  
+  boletas_talonario = db.query(Boleta).filter_by(id_talonario = id_talonario).order_by(asc(Boleta.consecutiva_id)).all()
+  print(boletas_talonario)
+  # Falta asignale las boletas a los vendedores
+  for vendedor in entrada:
+    vendedores = db.query(Vendedor).filter_by(id = vendedor.id_vendedor).first()
+
+  return vendedor

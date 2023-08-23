@@ -76,7 +76,6 @@ def mostrar_juegos_pasados(db:Session=Depends(get_db)):
     .join(Ganador, Premio.id == Ganador.id_premio) \
     .filter(Premio.fecha_juego.between(obtener_fechas_jugadas()["dos_semanas_atras"], obtener_fechas_jugadas()["actual"])) \
     .all()
-
     juegos_pasados= []
     for juegos in info_premio:
       juego = SchemaJuegosPasados(fecha=juegos.fecha_juego.strftime("%d-%m-%Y"), premio= juegos.premio, boleta_ganadora= juegos.numero_ganador)

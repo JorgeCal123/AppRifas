@@ -34,7 +34,7 @@ def mostrar_boletas_talonario(talonario_id:int,db:Session=Depends(get_db)):
     lista_boletas= darListaBoletas(talonario)
     premios=[]
     for prem in talonario.premios:
-        premio = SchemaPremios(id=prem.id, premio=prem.premio,imagen=prem.imagen, fecha_Juego=prem.fecha_Juego)
+        premio = SchemaPremios(id=prem.id, premio=prem.premio, imagen=prem.imagen, fecha_juego=prem.fecha_juego)
         premios.append(premio)
     schema_premio_talonario= {"id":talonario.id, "valor_boleta":talonario.valor_boleta, "celular":talonario.celular, "cantidad":talonario.cantidad, "boletas": lista_boletas, "premios": premios}
     schema_talonario= SchemaTalonarioXBoleta(**schema_premio_talonario)
@@ -57,7 +57,7 @@ def crear_Talonario(entrada:SchemaTalonarioPost, db:Session=Depends(get_db)):
     # De la lista de schemas de premios recorro cada uno
     for premio in entrada.premios:
         # Saco esa informacion y creo la instacia de premios
-        nuevo_premio = Premio(premio = premio.premio, imagen= premio.imagen, fecha_juego=premio.fecha_Juego, id_talonario=talonario.id)
+        nuevo_premio = Premio(premio = premio.premio, imagen= premio.imagen, fecha_juego=premio.fecha_juego, id_talonario=talonario.id)
         talonario.premios.append(nuevo_premio)
     """
         Llamo metodo crearBoletas que me entrega un diccionario que contiene una lista de numeros
@@ -78,15 +78,15 @@ def actualizar_Talonario(talonario_id:int,entrada:SchemaTalonarioPut,db:Session=
     talonario = db.query(Talonario).filter_by(id=talonario_id).first()
     talonario.valor_boleta=entrada.valor_boleta
     talonario.celular=entrada.celular
-    talonario.fecha_Juego=entrada.fecha_Juego
     db.commit()
     db.refresh(talonario)
     return talonario
 
 @routerTalonario.delete('/talonario/{talonario_id}',response_model=schemas.Respuesta)
-def eliminar_Talonario(boleta_id:int,db:Session=Depends(get_db)):
-    boleta = db.query(Talonario).filter_by(id=boleta_id).first()
-    db.delete(boleta)
+def eliminar_Talonario(talonario_id:int,db:Session=Depends(get_db)):
+
+    talonario = db.query(Talonario).filter_by(id=talonario_id).first()
+    db.delete(talonario)
     db.commit()
-    respuesta = schemas.Respuesta(mensaje="Eliminado exitosamente")
+    respuesta = schemas.Respuesta(mensaje="El talonario {} fue Eliminado exitosamente".format(talonario_id))
     return respuesta

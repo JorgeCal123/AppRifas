@@ -19,7 +19,6 @@ class SchemaTalonarioPost(BaseModel):
     cantidad: int
     premios: List[SchemaPremios]
 
-
     class Config:
         orm_mode =True
 
@@ -39,8 +38,6 @@ class SchemaTalonarioXBoleta(BaseModel):
 class SchemaTalonarioPut(BaseModel):   
     valor_boleta: int
     celular: str
-    #fecha_Juego: datetime
-
     class Config:
         orm_mode =True
 
@@ -51,5 +48,14 @@ class SchemaInfopremio(BaseModel):
 class SchemaTalonarioXpremio(BaseModel):   
     id_talonario: int
     premios: List[SchemaInfopremio]
+    
+class SchemaInfoVendedor(BaseModel):
+  id : int
+  nombre : str
 
+    
+class SchemaTalonarioXvendedor(BaseModel):
+    id_talonario: int
+    cantidad : int
+    vendedores : List[SchemaInfoVendedor]
 

@@ -11,7 +11,7 @@ routerVendedor = APIRouter()
 
 
 @routerVendedor.get("/vendedor", response_model= List[SchemaVendedorGet])
-def obtener_cliente(db:Session =  Depends(get_db)):
+def obtener_vendedor(db:Session =  Depends(get_db)):
 
   vendedores = db.query(Vendedor).all()
   schema_vendedores = []

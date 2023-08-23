@@ -4,6 +4,8 @@ from config.conexion import Base, get_db
 from sqlalchemy.schema import ForeignKey
 from sqlalchemy.orm import relationship
 import random
+
+
 def id_seis_digitos():
     db=next(get_db())
     while True:
@@ -49,8 +51,8 @@ class Talonario(Base):
 class Boleta(Base):
     __tablename__ = 'boletas'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    numero_increment = Column(BigInteger, server_default=func.next_value('numero_increment_seq'))
 
+    consecutiva_id = Column(Integer)                          
     qr_code = Column(String(255))
     estado_venta = Column(Boolean, nullable=True, default=False)
     estado_pagado = Column(Boolean, nullable=True, default=False)
