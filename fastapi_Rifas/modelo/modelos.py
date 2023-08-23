@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Sequence, BigInteger 
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Sequence, BigInteger, func
 from config.conexion import Base, get_db
 
 from sqlalchemy.schema import ForeignKey
@@ -11,6 +11,14 @@ def id_seis_digitos():
         if not db.query(Boleta).filter_by(id=id_seis_digitos).first():
             return id_seis_digitos
 
+def obtener_siguiente_valor():
+    db=next(get_db())
+
+    consulta = db.execute("SELECT MAX(numero_increment) FROM boletas;")
+    max_valor = consulta.scalar()
+    if max_valor is None:
+        return 1
+    return max_valor + 1
 
 class Cliente(Base):
     __tablename__ = 'clientes'
@@ -41,8 +49,8 @@ class Talonario(Base):
 class Boleta(Base):
     __tablename__ = 'boletas'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    consecutiva_id = Column(BigInteger, Sequence("Boleta_incremento"),
-                            server_default=Sequence("Boleta_incremento").next_value())
+    numero_increment = Column(BigInteger, server_default=func.next_value('numero_increment_seq'))
+
     qr_code = Column(String(255))
     estado_venta = Column(Boolean, nullable=True, default=False)
     estado_pagado = Column(Boolean, nullable=True, default=False)

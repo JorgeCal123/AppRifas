@@ -43,4 +43,3 @@ def obtener_fechas_jugadas():
     fechas_semana = {"actual":actual, "dos_semanas_atras":semanas_atras}
     
     return fechas_semana
-

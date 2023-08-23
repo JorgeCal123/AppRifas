@@ -81,7 +81,7 @@ def darListaBoletas(talonario: Talonario):
         for num in boleta.numeros:
             listanumeros.append(num.numero)
         schemaboleta= SchemaBoleta(
-            id = boleta.id, 
+            id = boleta.id,
             id_talonario= boleta.id_talonario,
             qr_code=boleta.qr_code,
             estado_venta=boleta.estado_venta,
