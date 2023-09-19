@@ -30,6 +30,7 @@ class SchemaCantidadBoletasVendedor(BaseModel):
     
 
 class SchemaBoletasAsignadas(BaseModel):
+    id_vendedor : int
     nombre : str
     rango_inicial : int
     rango_final: int

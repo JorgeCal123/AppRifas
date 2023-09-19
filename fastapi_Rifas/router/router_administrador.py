@@ -89,10 +89,7 @@ def talonario_vendedor(id_talonario:int, db:Session=Depends(get_db)):
 
 
 @routerAdmin.post('/admin/cantidadboletasvendedor/{id_talonario}', response_model= List[SchemaBoletasAsignadas])
-def Boletas_asignadas(id_talonario:int, total : int, entrada : List[SchemaCantidadBoletasVendedor], db:Session=Depends(get_db)): 
-
-  
-  boletas_talonario = db.query(Boleta).filter_by(id_talonario = id_talonario).order_by(asc(Boleta.consecutiva_id)).all()
+def Boletas_asignadas(id_talonario:int, total : int, entrada : List[SchemaCantidadBoletasVendedor], db:Session=Depends(get_db)):   
   total_asignada = reduce((lambda x, y: x + y.cantidad), entrada, 0)
   print(total_asignada)
   if total > total_asignada:
@@ -100,7 +97,6 @@ def Boletas_asignadas(id_talonario:int, total : int, entrada : List[SchemaCantid
   elif total < total_asignada:
     raise HTTPException(status_code=400, detail="Sobrepasa la cantidad de Boletas existentes")
   else:
-    print(boletas_talonario)
     # Falta asignale las boletas a los vendedores
     vendedores = []
     rango_inicial=1
@@ -108,7 +104,29 @@ def Boletas_asignadas(id_talonario:int, total : int, entrada : List[SchemaCantid
     for vendedor in entrada:
       rango_final = rango_final + vendedor.cantidad
       nombre_vendedor = db.query(Vendedor.nombre).filter_by(id = vendedor.id_vendedor).first()
-      vendedor = SchemaBoletasAsignadas(nombre=nombre_vendedor[0],rango_inicial=rango_inicial, rango_final=rango_final)
+      vendedor = SchemaBoletasAsignadas(id_vendedor=vendedor.id_vendedor, nombre=nombre_vendedor[0],rango_inicial=rango_inicial, rango_final=rango_final)
       vendedores.append(vendedor)
       rango_inicial = rango_final + 1
+    guardar_boletas_vendedor(id_talonario, vendedores, db)
     return vendedores
+
+def guardar_boletas_vendedor(id_talonario, vendedores, db):
+    boletas_talonario = db.query(Boleta).filter_by(id_talonario = id_talonario).order_by(asc(Boleta.consecutiva_id)).all()
+    for vendedor_schema in vendedores:
+      vendedor = db.query(Vendedor).filter_by(id = vendedor_schema.id_vendedor).first()
+      for consecutive_id in range(vendedor_schema.rango_inicial - 1, vendedor_schema.rango_final):
+        print(consecutive_id)
+        vendedor.boletas.append(boletas_talonario[consecutive_id])
+    db.add(vendedor)
+    db.commit()
+    db.refresh(vendedor)
+
+
+
+
+
+
+
+
+
+

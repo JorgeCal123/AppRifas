@@ -120,4 +120,3 @@ class Vendedor(Base):
     correo = Column(String(100))
     
     boletas = relationship("Boleta", back_populates='vendedor', cascade="all, delete-orphan")
-  
