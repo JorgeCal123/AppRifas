@@ -23,24 +23,29 @@ import random
         "id_vendedor": 301
     }
 """
-def generar_numero(primerDigito):
+
+class MiErrorPersonalizado(Exception):
+    def __init__(self):
+        self.mensaje = "Error: La cantidad de oportunidades registradas hasta el momento es de 10, 8, 3 y 2"
+
+def generar_numero_ocho_oportunidades(primerDigito):
     primer_numero = 0
 
     if primerDigito == 0:
         primer_numero = str(random.choice([3, 4]))
-    if primerDigito == 1:
+    elif primerDigito == 1:
         primer_numero = str(random.choice([9, 8]))
-    if primerDigito == 2:
+    elif primerDigito == 2:
         primer_numero = str(random.choice([2]))
-    if primerDigito == 3:
+    elif primerDigito == 3:
         primer_numero = str(random.choice([7]))
-    if primerDigito == 4:
+    elif primerDigito == 4:
         primer_numero = str(random.choice([1]))
-    if primerDigito == 5:
+    elif primerDigito == 5:
         primer_numero = str(random.choice([6]))
-    if primerDigito == 6:
+    elif primerDigito == 6:
         primer_numero = str(random.choice([0]))
-    if primerDigito == 7:
+    elif primerDigito == 7:
         primer_numero = str(random.choice([5]))
     otros_tres_digitos = str(random.randint(0, 999)).zfill(3)
     
@@ -52,12 +57,15 @@ def seleccionar_formato(cantidad_oportunidades, primerDigito):
     numero = 0
     if cantidad_oportunidades == 2:
         pass
-    if cantidad_oportunidades == 3:
+    elif cantidad_oportunidades == 3:
         pass
-    if cantidad_oportunidades == 8:
-        numero= generar_numero(primerDigito)
-    if cantidad_oportunidades == 10:
+    elif cantidad_oportunidades == 8:
+        numero = generar_numero_ocho_oportunidades(primerDigito)
+    elif cantidad_oportunidades == 10:
         pass
+    else:
+        raise MiErrorPersonalizado()
+
     return numero
 
 talonario = []
@@ -74,12 +82,18 @@ def generar_boletas(cantidad_boletas, cantidad_oportunidades):
             "qr_code": "xxx-xxx-xxx-xxx",
             "numeros": []
         }
-        
         # Generar 8 números de 4 dígitos para cada boleta segun formato
         numeros_boleta = set()
         numeros = list()
+        print("entra 1")
+
         while len(numeros_boleta) < cantidad_oportunidades:
-            numero = seleccionar_formato(cantidad_oportunidades, len(numeros_boleta))
+            numero = 0
+            try:
+                numero = seleccionar_formato(cantidad_oportunidades, len(numeros_boleta))
+            except MiErrorPersonalizado as error:
+               print(error.mensaje)
+               return
             if numero not in numeros_generados:
                 numeros_boleta.add(numero)
                 numeros_generados.add(numero)
@@ -93,9 +107,9 @@ def generar_boletas(cantidad_boletas, cantidad_oportunidades):
 
 
 cantidad_boletas = 10
-cantidad_oportunidades = 4
+cantidad_oportunidades = 7
 
 generar_boletas(cantidad_boletas, cantidad_oportunidades)
 # Imprimir el talonario
 for boleta in talonario:
-    print(f"ID: {boleta['id']}, Cantidad de Boletas: {boleta['cantidad_boletas']}, Boletas: {', '.join(boleta['boletas'])}")
+    print(f"consecutiva_id: {boleta['consecutiva_id']}, qr_code: {boleta['qr_code']}, Boletas: {', '.join(boleta['boletas'])}")

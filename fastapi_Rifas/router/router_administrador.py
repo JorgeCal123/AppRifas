@@ -6,7 +6,8 @@ from config.conexion import  get_db
 from schema.schema_talonario import *
 from schema.schema_vendedor import *
 from modelo.modelos import *
-
+from fastapi import HTTPException
+from functools import reduce
 
 
 
@@ -87,14 +88,27 @@ def talonario_vendedor(id_talonario:int, db:Session=Depends(get_db)):
 
 
 
-@routerAdmin.patch('/admin/cantidadboletasvendedor/{id_talonario}', response_model= SchemaBoletasAsignadas)
-def Boletas_asignadas(id_talonario:int, entrada = List[SchemaCantidadBoletasVendedor], db:Session=Depends(get_db)): 
+@routerAdmin.post('/admin/cantidadboletasvendedor/{id_talonario}', response_model= List[SchemaBoletasAsignadas])
+def Boletas_asignadas(id_talonario:int, total : int, entrada : List[SchemaCantidadBoletasVendedor], db:Session=Depends(get_db)): 
 
   
   boletas_talonario = db.query(Boleta).filter_by(id_talonario = id_talonario).order_by(asc(Boleta.consecutiva_id)).all()
-  print(boletas_talonario)
-  # Falta asignale las boletas a los vendedores
-  for vendedor in entrada:
-    vendedores = db.query(Vendedor).filter_by(id = vendedor.id_vendedor).first()
-
-  return vendedor
+  total_asignada = reduce((lambda x, y: x + y.cantidad), entrada, 0)
+  print(total_asignada)
+  if total > total_asignada:
+    raise HTTPException(status_code=400, detail="Falta asignar Boletas")
+  elif total < total_asignada:
+    raise HTTPException(status_code=400, detail="Sobrepasa la cantidad de Boletas existentes")
+  else:
+    print(boletas_talonario)
+    # Falta asignale las boletas a los vendedores
+    vendedores = []
+    rango_inicial=1
+    rango_final = 0
+    for vendedor in entrada:
+      rango_final = rango_final + vendedor.cantidad
+      nombre_vendedor = db.query(Vendedor.nombre).filter_by(id = vendedor.id_vendedor).first()
+      vendedor = SchemaBoletasAsignadas(nombre=nombre_vendedor[0],rango_inicial=rango_inicial, rango_final=rango_final)
+      vendedores.append(vendedor)
+      rango_inicial = rango_final + 1
+    return vendedores
