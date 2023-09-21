@@ -16,19 +16,18 @@ class SchemaTalonario(BaseModel):
 class SchemaTalonarioPost(BaseModel):
     valor_boleta: int
     celular: str
-    cantidad: int
+    cantidad_Boletas: int
     premios: List[SchemaPremios]
 
     class Config:
         orm_mode =True
 
-
 class SchemaTalonarioXBoleta(BaseModel):
     id: int
     valor_boleta: int
     celular: str
-    premios: List[SchemaPremios]
     cantidad: int
+    premios: List[SchemaPremios]
     boletas: List[SchemaBoleta]
     class Config:
         orm_mode =True

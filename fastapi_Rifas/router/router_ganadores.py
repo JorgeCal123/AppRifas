@@ -21,9 +21,11 @@ def mostarGanadores(db:Session = Depends(get_db)):
     return basic_ganadores
 
 """
-@routerGanadoras.post('/ganadores/{talonario_id}',response_model=SchemaGanador)
+@routerGanadoras.post('/ganadores/{talonario_id}',response_model=SchemaGanador, tags=["Ganador"])
 def registrar_numero_ganador(talonario_id:int,entrada:SchemaGanadorPost,db:Session=Depends(get_db)):
-  
+    """
+    Falta hacerlo
+    """
 
   
     return 

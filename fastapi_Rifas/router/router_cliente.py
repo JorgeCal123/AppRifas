@@ -10,7 +10,7 @@ from modelo.modelos import Cliente
 routerCliente = APIRouter()
 
 
-@routerCliente.get("/cliente", response_model= List[SchemaClienteGet])
+@routerCliente.get("/cliente", response_model= List[SchemaClienteGet], tags=["Cliente"])
 def obtener_cliente(db:Session =  Depends(get_db)):
 
   clientes = db.query(Cliente).all()
@@ -23,7 +23,7 @@ def obtener_cliente(db:Session =  Depends(get_db)):
   
 
   
-@routerCliente.post("/cliente/", response_model= SchemaCliente)
+@routerCliente.post("/cliente/", response_model= SchemaCliente, tags=["Cliente"])
 def registrar_cliente(cliente:SchemaClientePost, db: Session = Depends(get_db)):
   respuesta = SchemaCliente(mensaje=f"el cliente {cliente.nombre} se registro satisfactoria mente")
   nuevo_cliente = Cliente(nombre = cliente.nombre, apellido = cliente.apellido, celular = cliente.celular, direccion = cliente.direccion, notificacion = cliente.notificacion)

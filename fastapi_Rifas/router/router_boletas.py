@@ -28,7 +28,7 @@ def create_boletas(entrada:SchemaBoleta, db:Session=Depends(get_db)):
     return boleta
 """
 
-@routerBoletas.put('/boletas/{boleta_id}',response_model=SchemaBoleta)
+@routerBoletas.put('/boletas/{boleta_id}',response_model=SchemaBoleta, tags=["Boletas"])
 def actualizar_Boleta(boleta_id:int, entrada:BoletaActualizar, db:Session=Depends(get_db)):
     
     boleta = db.query(Boleta).filter_by(id=boleta_id).first()

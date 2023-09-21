@@ -10,7 +10,7 @@ from modelo.modelos import Vendedor
 routerVendedor = APIRouter()
 
 
-@routerVendedor.get("/vendedor", response_model= List[SchemaVendedorGet])
+@routerVendedor.get("/vendedor", response_model= List[SchemaVendedorGet], tags=["Vendedor"])
 def obtener_vendedor(db:Session =  Depends(get_db)):
 
   vendedores = db.query(Vendedor).all()
@@ -23,7 +23,7 @@ def obtener_vendedor(db:Session =  Depends(get_db)):
   
 
   
-@routerVendedor.post("/vendedor", response_model= SchemaVendedor)
+@routerVendedor.post("/vendedor", response_model= SchemaVendedor, tags=["Vendedor"])
 def registrar_vendedor(vendedor:SchemaVendedorPost, db: Session = Depends(get_db)):
   respuesta = SchemaVendedor(mensaje=f"el vendedor {vendedor.nombre} se registro satisfactoria mente")
   nuevo_vendedor = Vendedor(nombre = vendedor.nombre, apellido = vendedor.apellido, celular = vendedor.celular, correo = vendedor.correo)

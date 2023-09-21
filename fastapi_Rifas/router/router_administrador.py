@@ -14,7 +14,7 @@ from functools import reduce
 routerAdmin= APIRouter()
 
 
-@routerAdmin.get('/admin/opcionestalonario',response_model=List[SchemaTalonarioXpremio])
+@routerAdmin.get('/admin/opcionestalonario',response_model=List[SchemaTalonarioXpremio], tags=["Administrador"])
 def opciones_talonarios(db:Session=Depends(get_db)):
   
   """
@@ -68,7 +68,7 @@ def talonarios_premio(info_premio):
 
 
 
-@routerAdmin.get('/admin/boletasvendedor/{id_talonario}', response_model= SchemaTalonarioXvendedor)
+@routerAdmin.get('/admin/boletasvendedor/{id_talonario}', response_model= SchemaTalonarioXvendedor, tags=["Administrador"])
 def talonario_vendedor(id_talonario:int, db:Session=Depends(get_db)): 
 
   
@@ -88,7 +88,7 @@ def talonario_vendedor(id_talonario:int, db:Session=Depends(get_db)):
 
 
 
-@routerAdmin.post('/admin/cantidadboletasvendedor/{id_talonario}', response_model= List[SchemaBoletasAsignadas])
+@routerAdmin.post('/admin/cantidadboletasvendedor/{id_talonario}', response_model= List[SchemaBoletasAsignadas], tags=["Administrador"])
 def Boletas_asignadas(id_talonario:int, total : int, entrada : List[SchemaCantidadBoletasVendedor], db:Session=Depends(get_db)):   
   total_asignada = reduce((lambda x, y: x + y.cantidad), entrada, 0)
   print(total_asignada)
@@ -120,13 +120,3 @@ def guardar_boletas_vendedor(id_talonario, vendedores, db):
     db.add(vendedor)
     db.commit()
     db.refresh(vendedor)
-
-
-
-
-
-
-
-
-
-

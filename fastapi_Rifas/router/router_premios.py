@@ -14,7 +14,7 @@ from datetime import datetime
 routerPremios = APIRouter()
 
 
-@routerPremios.get("/juegosemanal",response_model=List[SchemaInfoJuegos])
+@routerPremios.get("/juegosemanal",response_model=List[SchemaInfoJuegos], tags=["Premios"])
 def mostrar_info_juegos(db:Session=Depends(get_db)):
  
     info_premio = db.query(Premio.premio, Premio.fecha_juego, Ganador.numero_ganador) \
@@ -69,7 +69,7 @@ def formato_info_juego(info_premio):
     return dict_premio
 
 
-@routerPremios.get("/juegospasados",response_model=List[SchemaJuegosPasados])
+@routerPremios.get("/juegospasados",response_model=List[SchemaJuegosPasados], tags=["Premios"])
 def mostrar_juegos_pasados(db:Session=Depends(get_db)):
  
     info_premio = db.query(Premio.premio, Premio.fecha_juego, Ganador.numero_ganador) \

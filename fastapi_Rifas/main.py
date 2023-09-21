@@ -12,16 +12,27 @@ import uvicorn
 import modelo.modelos as models
 import datetime
 from app.fechas_semana import obtener_fechas_lunes_a_domingo
-models.Base.metadata.create_all(bind=engine)
-app = FastAPI()
+from fastapi.openapi.models import Info
 
+models.Base.metadata.create_all(bind=engine)
+app = FastAPI(
+    description="""
+    Descripcion para el uso de la api de Rifas \n
+        Pagina de inicio \n
+    Apis
+    Apis2
+    
+    """
+)
+
+app.include_router(routerAdmin)
 app.include_router(routerTalonario)
-app.include_router(routerBoletas)
+app.include_router(routerVendedor)
+
+#app.include_router(routerBoletas)
 app.include_router(routerGanadoras)
 app.include_router(routerPremios)
 app.include_router(routerCliente)
-app.include_router(routerVendedor)
-app.include_router(routerAdmin)
 
 
 if __name__== "__main__":
