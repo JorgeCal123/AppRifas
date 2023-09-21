@@ -103,8 +103,8 @@ def Boletas_asignadas(id_talonario:int, total : int, entrada : List[SchemaCantid
     rango_final = 0
     for vendedor in entrada:
       rango_final = rango_final + vendedor.cantidad
-      nombre_vendedor = db.query(Vendedor.nombre).filter_by(id = vendedor.id_vendedor).first()
-      vendedor = SchemaBoletasAsignadas(id_vendedor=vendedor.id_vendedor, nombre=nombre_vendedor[0],rango_inicial=rango_inicial, rango_final=rango_final)
+      nombre_vendedor = db.query(Vendedor.nombre).filter_by(cedula = vendedor.cedula_vendedor).first()
+      vendedor = SchemaBoletasAsignadas(cedula_vendedor=vendedor.cedula_vendedor, nombre=nombre_vendedor[0],rango_inicial=rango_inicial, rango_final=rango_final)
       vendedores.append(vendedor)
       rango_inicial = rango_final + 1
     guardar_boletas_vendedor(id_talonario, vendedores, db)
@@ -113,7 +113,7 @@ def Boletas_asignadas(id_talonario:int, total : int, entrada : List[SchemaCantid
 def guardar_boletas_vendedor(id_talonario, vendedores, db):
     boletas_talonario = db.query(Boleta).filter_by(id_talonario = id_talonario).order_by(asc(Boleta.consecutiva_id)).all()
     for vendedor_schema in vendedores:
-      vendedor = db.query(Vendedor).filter_by(id = vendedor_schema.id_vendedor).first()
+      vendedor = db.query(Vendedor).filter_by(cedula = vendedor_schema.cedula_vendedor).first()
       for consecutive_id in range(vendedor_schema.rango_inicial - 1, vendedor_schema.rango_final):
         print(consecutive_id)
         vendedor.boletas.append(boletas_talonario[consecutive_id])
