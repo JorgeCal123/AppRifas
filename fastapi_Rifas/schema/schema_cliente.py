@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional, List
 
 class SchemaCliente(BaseModel):
   mensaje: str
@@ -14,8 +15,8 @@ class SchemaClienteGet(BaseModel):
   
 class SchemaClientePost(BaseModel):
     
-    nombre : str
-    apellido : str
+    nombre : Optional[str]
+    apellido : Optional[str]
     celular : str
-    direccion : str
+    direccion : Optional[str]
     notificacion : bool

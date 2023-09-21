@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class SchemaVenta(BaseModel):
-  consecutivo_id: int
+  consecutiva_id: int
   pagada: bool
 
 

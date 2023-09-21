@@ -6,7 +6,7 @@ class SchemaVendedor(BaseModel):
 
 
 class SchemaVendedorPost(BaseModel):
-   
+    cedula: str
     nombre : str
     apellido : str
     celular : str
@@ -14,7 +14,7 @@ class SchemaVendedorPost(BaseModel):
 
 
 class SchemaVendedorGet(BaseModel):
-    id : int
+    cedula : int
     nombre : str
     apellido : str
     celular : str
@@ -25,12 +25,12 @@ class SchemaAsignarBoletas(BaseModel):
 
 
 class SchemaCantidadBoletasVendedor(BaseModel):
-    id_vendedor : int
+    cedula_vendedor : int
     cantidad : int
     
 
 class SchemaBoletasAsignadas(BaseModel):
-    id_vendedor : int
+    cedula_vendedor : int
     nombre : str
     rango_inicial : int
     rango_final: int

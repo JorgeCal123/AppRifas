@@ -7,6 +7,7 @@ from router.router_premios import routerPremios
 from router.router_cliente import routerCliente
 from router.router_vendedor import routerVendedor
 from router.router_administrador import routerAdmin
+from router.router_venta_boleta import routerVenta
 
 import uvicorn
 import modelo.modelos as models
@@ -28,6 +29,7 @@ app = FastAPI(
 app.include_router(routerAdmin)
 app.include_router(routerTalonario)
 app.include_router(routerVendedor)
+app.include_router(routerVenta)
 
 #app.include_router(routerBoletas)
 app.include_router(routerGanadoras)

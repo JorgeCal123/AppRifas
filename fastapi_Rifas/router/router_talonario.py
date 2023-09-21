@@ -18,6 +18,38 @@ from fastapi.responses import JSONResponse
 
 routerTalonario = APIRouter()
 
+
+@routerTalonario.post('/talonario/', tags=["Talonario"])
+def crear_Talonario(entrada:SchemaTalonarioPost, db:Session=Depends(get_db)):
+    """
+    Crea un talonario con los premios y las boletas de acuerdo a la cantidad que se ingrese\n
+    Returns:\n
+        "valor_boleta"
+        "celular"
+        "cantidad"
+        "Lista de Premios"
+    """
+    talonario = Talonario(id = id_seis_digitos(), valor_boleta=entrada.valor_boleta, celular=entrada.celular, cantidad= entrada.cantidad_Boletas)
+
+    # De la lista de schemas de premios recorro cada uno
+    for premio in entrada.premios:
+        # Saco esa informacion y creo la instacia de premios
+        nuevo_premio = Premio(premio = premio.premio, imagen= premio.imagen, fecha_juego=premio.fecha_juego, id_talonario=talonario.id)
+        talonario.premios.append(nuevo_premio)
+    """
+        Llamo metodo crearBoletas que me entrega un diccionario que contiene una lista de numeros
+        y el código qr
+    """
+    """
+    llamo el metodo guardar boleta que me recibe por parametro:
+        numeros_boleta: el metodo de arriba
+        talonria: La instancia del talonario (linea 55)
+        db: la sesion en la que estamos actualmente en la base de datos
+    """
+    guardarBoletas(crearBoletas(entrada.cantidad_Boletas), talonario, db)
+    data = {"mensaje": "¡Operación exitosa!", "Id_talonario": talonario.id}
+    return JSONResponse(content=data, status_code=201)  
+
 @routerTalonario.get('/talonario/',
                      response_model=List[SchemaTalonario],
                      tags=["Talonario"],
@@ -62,38 +94,6 @@ def mostrar_Talonario_Completo(talonario_id:int,db:Session=Depends(get_db)):
     schema_premio_talonario= {"id":talonario.id, "valor_boleta":talonario.valor_boleta, "celular":talonario.celular, "cantidad":talonario.cantidad, "boletas": lista_boletas, "premios": premios}
     schema_talonario= SchemaTalonarioXBoleta(**schema_premio_talonario)
     return schema_talonario
-
-@routerTalonario.post('/talonario/', tags=["Talonario"])
-def crear_Talonario(entrada:SchemaTalonarioPost, db:Session=Depends(get_db)):
-    """
-    Crea un talonario con los premios y las boletas de acuerdo a la cantidad que se ingrese\n
-    Returns:\n
-        "valor_boleta"
-        "celular"
-        "cantidad"
-        "Lista de Premios"
-    """
-    talonario = Talonario(id = id_seis_digitos(), valor_boleta=entrada.valor_boleta, celular=entrada.celular, cantidad= entrada.cantidad_Boletas)
-
-    # De la lista de schemas de premios recorro cada uno
-    for premio in entrada.premios:
-        # Saco esa informacion y creo la instacia de premios
-        nuevo_premio = Premio(premio = premio.premio, imagen= premio.imagen, fecha_juego=premio.fecha_juego, id_talonario=talonario.id)
-        talonario.premios.append(nuevo_premio)
-    """
-        Llamo metodo crearBoletas que me entrega un diccionario que contiene una lista de numeros
-        y el código qr
-    """
-    """
-    llamo el metodo guardar boleta que me recibe por parametro:
-        numeros_boleta: el metodo de arriba
-        talonria: La instancia del talonario (linea 55)
-        db: la sesion en la que estamos actualmente en la base de datos
-    """
-    guardarBoletas(crearBoletas(entrada.cantidad), talonario, db)
-    data = {"mensaje": "¡Operación exitosa!", "Id_talonario": talonario.id}
-    return JSONResponse(content=data, status_code=201)  
-
 
 
 @routerTalonario.put('/talonario/{talonario_id}',response_model=SchemaTalonarioPut, tags=["Talonario"])

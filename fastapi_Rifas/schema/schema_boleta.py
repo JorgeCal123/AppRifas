@@ -6,6 +6,7 @@ from schema.schema_numero_boletas import SchemaNumeroBoleta
 class SchemaBoleta(BaseModel):
     id: Optional[int]
     id_talonario:Optional[int]
+    consecutiva_id: Optional[int]
     qr_code: str
     estado_venta: Optional[bool]
     estado_pagado: Optional[bool]

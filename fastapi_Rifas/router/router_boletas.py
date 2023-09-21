@@ -95,6 +95,7 @@ def darListaBoletas(talonario: Talonario):
         schemaboleta= SchemaBoleta(
             id = boleta.id,
             id_talonario= boleta.id_talonario,
+            consecutiva_id= boleta.consecutiva_id,
             qr_code=boleta.qr_code,
             estado_venta=boleta.estado_venta,
             estado_pagado=boleta.estado_pagado,

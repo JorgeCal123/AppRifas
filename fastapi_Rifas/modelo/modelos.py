@@ -25,11 +25,11 @@ def obtener_siguiente_valor():
 class Cliente(Base):
     __tablename__ = 'clientes'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    nombre = Column(String(200))
-    apellido = Column(String(20))
-    celular = Column(String(13))
-    direccion = Column(String(50))
-    notificacion = Column(Boolean)
+    nombre = Column(String(200), nullable=True, default=None)
+    apellido = Column(String(20), nullable=True, default=None)
+    celular = Column(String(13), unique=True, nullable=False)
+    direccion = Column(String(50), nullable=True, default=None)
+    notificacion = Column(Boolean, default=False)
     
     boletas = relationship("Boleta", back_populates='cliente', cascade="all, delete-orphan")
     
@@ -51,7 +51,7 @@ class Talonario(Base):
 class Boleta(Base):
     __tablename__ = 'boletas'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    consecutiva_id = Column(Integer)                          
+    consecutiva_id = Column(Integer)
     qr_code = Column(String(255))
     estado_venta = Column(Boolean, nullable=True, default=False)
     estado_pagado = Column(Boolean, nullable=True, default=False)
@@ -67,7 +67,7 @@ class Boleta(Base):
     id_cliente = Column(Integer, ForeignKey("clientes.id", ondelete="CASCADE"))
     cliente = relationship("Cliente", back_populates='boletas')
 
-    id_vendedor = Column(Integer, ForeignKey("vendedores.id", ondelete="CASCADE"))
+    id_vendedor = Column(String(20), ForeignKey("vendedores.cedula", ondelete="CASCADE"))
     vendedor = relationship("Vendedor", back_populates='boletas')
 
 
@@ -113,7 +113,7 @@ class Ganador(Base):
     
 class Vendedor(Base):
     __tablename__ = 'vendedores'
-    cedula = Column(Integer, primary_key=True)
+    cedula = Column(String(20), primary_key=True)
     nombre = Column(String(200))
     apellido = Column(String(20))
     celular = Column(String(13))

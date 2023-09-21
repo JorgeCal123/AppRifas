@@ -17,7 +17,7 @@ def obtener_vendedor(db:Session =  Depends(get_db)):
   schema_vendedores = []
   for vendedor in vendedores:
     #Se crea una instancia de SchemaVendedorGet y se pasa los atributos
-    schema_vendedor = SchemaVendedorGet(id = vendedor.id, nombre=vendedor.nombre, apellido=vendedor.apellido, celular=vendedor.celular, correo = vendedor.correo)
+    schema_vendedor = SchemaVendedorGet(cedula = vendedor.cedula, nombre=vendedor.nombre, apellido=vendedor.apellido, celular=vendedor.celular, correo = vendedor.correo)
     schema_vendedores.append(schema_vendedor)
   return schema_vendedores
   
@@ -26,7 +26,7 @@ def obtener_vendedor(db:Session =  Depends(get_db)):
 @routerVendedor.post("/vendedor", response_model= SchemaVendedor, tags=["Vendedor"])
 def registrar_vendedor(vendedor:SchemaVendedorPost, db: Session = Depends(get_db)):
   respuesta = SchemaVendedor(mensaje=f"el vendedor {vendedor.nombre} se registro satisfactoria mente")
-  nuevo_vendedor = Vendedor(nombre = vendedor.nombre, apellido = vendedor.apellido, celular = vendedor.celular, correo = vendedor.correo)
+  nuevo_vendedor = Vendedor(cedula= vendedor.cedula, nombre = vendedor.nombre, apellido = vendedor.apellido, celular = vendedor.celular, correo = vendedor.correo)
   db.add(nuevo_vendedor)
   db.commit()
   db.refresh(nuevo_vendedor)
