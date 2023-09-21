@@ -113,10 +113,11 @@ class Ganador(Base):
     
 class Vendedor(Base):
     __tablename__ = 'vendedores'
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    cedula = Column(Integer, primary_key=True)
     nombre = Column(String(200))
     apellido = Column(String(20))
     celular = Column(String(13))
     correo = Column(String(100))
+    contraseña = Column(String(20))
     
     boletas = relationship("Boleta", back_populates='vendedor', cascade="all, delete-orphan")
