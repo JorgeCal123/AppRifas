@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from config.conexion import  get_db
+from datetime import datetime
 
 from schema.schema_venta_boletas import *
 from schema.schema_cliente import SchemaClienteGet
@@ -18,6 +19,7 @@ def registrar_venta_boleta(id_talonaro: int, vendidas:List[SchemaVenta], db: Ses
     nuevo_venta = db.query(Boleta).filter_by(consecutiva_id = boleta.consecutiva_id, id_talonario=id_talonaro).first()
     nuevo_venta.estado_venta = True
     nuevo_venta.estado_pagado = boleta.pagada
+    nuevo_venta.fecha_venta = datetime.now()
     boleta_vendida = Schema_Boleta_vendida(id=nuevo_venta.id)
     id_boletas.append(boleta_vendida)
     db.commit()
