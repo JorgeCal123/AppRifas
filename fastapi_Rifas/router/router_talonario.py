@@ -9,7 +9,6 @@ from schema.schema_premios import SchemaPremios
 from modelo.modelos import Talonario, Premio, id_seis_digitos
 import schema.schemas as schemas
 
-from app.appBoletas import crearBoletas
 from typing import List
 
 from .router_boletas import guardarBoletas, darListaBoletas
@@ -46,7 +45,7 @@ def crear_Talonario(entrada:SchemaTalonarioPost, db:Session=Depends(get_db)):
         talonria: La instancia del talonario (linea 55)
         db: la sesion en la que estamos actualmente en la base de datos
     """
-    guardarBoletas(crearBoletas(entrada.cantidad_Boletas), talonario, db)
+    guardarBoletas(entrada.cantidad_Boletas, entrada.cantidad_oportunidades, talonario, db)
     data = {"mensaje": "¡Operación exitosa!", "Id_talonario": talonario.id}
     return JSONResponse(content=data, status_code=201)  
 

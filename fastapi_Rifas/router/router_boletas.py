@@ -4,7 +4,10 @@ from sqlalchemy.orm import Session
 from config.conexion import  get_db
 from schema.schema_boleta import SchemaBoleta, BoletaActualizar
 from modelo.modelos import Boleta, Talonario, NumeroBoleta, id_seis_digitos
-import random
+from app.appBoletas_v3 import generar_boletas
+import time
+from tqdm import tqdm
+
 
 routerBoletas = APIRouter()
 """
@@ -43,48 +46,45 @@ def actualizar_Boleta(boleta_id:int, entrada:BoletaActualizar, db:Session=Depend
     db.refresh(boleta)
     return boleta
 
+def guardarBoletas(cantidad_boletas, cantidad_oportunidades, talonario, db):
+    
+    tiempo_inicio = time.time()
+    print("Empieza a contar")
 
-def id_consecutivo(id_talonario):
-  db=next(get_db())
-  cantidad = db.query(Boleta).filter_by(id_talonario=id_talonario).count()
-  return cantidad + 1
+    boletas=generar_boletas(cantidad_boletas=cantidad_boletas,cantidad_oportunidades=cantidad_oportunidades)
+    for boleta in tqdm(boletas, desc="Procesando valores de la lista"):
 
+        numeros_generados = set()
+        generado = True
+        id = id_seis_digitos()
 
-def guardarBoletas(boletas, talonario, db):
-    # por cada numero de boletas creo una instancia de Boletas y le ingreso la informacion
-    db.add(talonario)
-    db.commit()
-    db.refresh(talonario)
-    for boleta in boletas:
-        nueva_boleta = Boleta(id = id_seis_digitos(), consecutiva_id = id_consecutivo(talonario.id), qr_code =boletas[boleta]["qr_code"])
+        while(generado):
+            if id not in numeros_generados:
+                numeros_generados.add(id)
+                break
+            else:
+                id = id_seis_digitos()
 
-        # conmo tiene una relaionship se trata como una lista
-        # un talonario tiene muchas boletas
+        nueva_boleta = Boleta(id = id_seis_digitos(), consecutiva_id = boleta["consecutiva_id"], qr_code =boleta["qr_code"])
         talonario.boletas.append(nueva_boleta)
         db.add(nueva_boleta)
         db.commit()
         db.refresh(nueva_boleta)
 
-        # De igual forma una boleta tiene muchos numeros de boletas,
-        # se crea la instancia de NumeroBoleta y se le mete la informacion
-        for numero in boletas[boleta]["numeros"]:
-            numeros = NumeroBoleta(numero= numero, id_boleta=nueva_boleta.id)
-            # Una boleta tiene muchos numeros
+        for numero in boleta["numeros"]:
+            numeros = NumeroBoleta(numero= numero)
             nueva_boleta.numeros.append(numeros)
 
-    # Se guarda en este caso solo talonario porque con el simple hecho de tener
-    # una relationship ya todo queda empaquetado o relacionado (al hacer append)
-
-    # un talonario tiene muchas boletas,
-    # y una boleta tiene muchos numeros de boleta
-
-    # Talonario -> Boleta -> NumeroBoleta
-    
-    # Talonario.boletas.append(Boleta)
-    # Boleta.numerosBoletas.append(NumeroBoleta)
     db.add(talonario)
     db.commit()
     db.refresh(talonario)
+    tiempo_fin = time.time()
+    diferencia_segundos = tiempo_fin - tiempo_inicio
+    minutos = int(diferencia_segundos // 60)
+    segundos = int(diferencia_segundos % 60)
+
+    # Imprimir el tiempo de ejecución
+    print(f"Tiempo de ejecución: {minutos} minutos y {segundos} segundos")
 
 def darListaBoletas(talonario: Talonario):
     listaBoletas= []

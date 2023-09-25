@@ -74,7 +74,7 @@ class Boleta(Base):
 class NumeroBoleta(Base):
     __tablename__ = 'Numero_boletas'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    numero = Column(Integer)
+    numero = Column(String(4))
 
     id_boleta = Column(Integer, ForeignKey("boletas.id", ondelete="CASCADE"))
     boleta = relationship("Boleta", back_populates='numeros')

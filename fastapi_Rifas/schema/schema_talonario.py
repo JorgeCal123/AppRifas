@@ -17,6 +17,7 @@ class SchemaTalonarioPost(BaseModel):
     valor_boleta: int
     celular: str
     cantidad_Boletas: int
+    cantidad_oportunidades: int
     premios: List[SchemaPremios]
 
     class Config:

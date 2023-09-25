@@ -28,6 +28,35 @@ class MiErrorPersonalizado(Exception):
     def __init__(self):
         self.mensaje = "Error: La cantidad de oportunidades registradas hasta el momento es de 10, 8, 3 y 2"
 
+def generar_numero_dos_oportunidades(primerDigito):
+    primer_numero = 0
+
+    if primerDigito == 0:
+        primer_numero = str(random.choice([5,6,7,8,9]))
+
+    elif primerDigito == 1:
+        primer_numero = str(random.choice([0,1,2,3,4]))
+
+    otros_tres_digitos = str(random.randint(0, 999)).zfill(3)
+    
+    numero = primer_numero + otros_tres_digitos
+
+    return numero
+def generar_numero_tres_oportunidades(primerDigito):
+    primer_numero = 0
+
+    if primerDigito == 0:
+        primer_numero = str(random.choice([7,8,9]))
+    elif primerDigito == 1:
+        primer_numero = str(random.choice([4,5,6]))
+    elif primerDigito == 2:
+        primer_numero = str(random.choice([0,1,2,3]))
+
+    otros_tres_digitos = str(random.randint(0, 999)).zfill(3)
+    
+    numero = primer_numero + otros_tres_digitos
+
+    return numero
 def generar_numero_ocho_oportunidades(primerDigito):
     primer_numero = 0
 
@@ -36,17 +65,46 @@ def generar_numero_ocho_oportunidades(primerDigito):
     elif primerDigito == 1:
         primer_numero = str(random.choice([9, 8]))
     elif primerDigito == 2:
-        primer_numero = str(random.choice([2]))
+        primer_numero = str(2)
     elif primerDigito == 3:
-        primer_numero = str(random.choice([7]))
+        primer_numero = str(7)
     elif primerDigito == 4:
-        primer_numero = str(random.choice([1]))
+        primer_numero = str(1)
     elif primerDigito == 5:
-        primer_numero = str(random.choice([6]))
+        primer_numero = str(6)
     elif primerDigito == 6:
-        primer_numero = str(random.choice([0]))
+        primer_numero = str(0)
     elif primerDigito == 7:
-        primer_numero = str(random.choice([5]))
+        primer_numero = str(5)
+    otros_tres_digitos = str(random.randint(0, 999)).zfill(3)
+    
+    numero = primer_numero + otros_tres_digitos
+
+    return numero
+
+def generar_numero_dies_oportunidades(primerDigito):
+    primer_numero = 0
+
+    if primerDigito == 0:
+        primer_numero = str(3)
+    elif primerDigito == 1:
+        primer_numero = str(4)
+    elif primerDigito == 2:
+        primer_numero = str(9)
+    elif primerDigito == 3:
+        primer_numero = str(8)
+    elif primerDigito == 4:
+        primer_numero = str(2)
+    elif primerDigito == 5:
+        primer_numero = str(7)
+    elif primerDigito == 6:
+        primer_numero = str(1)
+    elif primerDigito == 7:
+        primer_numero = str(6)
+    elif primerDigito == 6:
+        primer_numero = str(0)
+    elif primerDigito == 7:
+        primer_numero = str(5)
     otros_tres_digitos = str(random.randint(0, 999)).zfill(3)
     
     numero = primer_numero + otros_tres_digitos
@@ -56,13 +114,13 @@ def generar_numero_ocho_oportunidades(primerDigito):
 def seleccionar_formato(cantidad_oportunidades, primerDigito):
     numero = 0
     if cantidad_oportunidades == 2:
-        pass
+        numero = generar_numero_dos_oportunidades(primerDigito)
     elif cantidad_oportunidades == 3:
-        pass
+        numero = generar_numero_tres_oportunidades(primerDigito)
     elif cantidad_oportunidades == 8:
         numero = generar_numero_ocho_oportunidades(primerDigito)
     elif cantidad_oportunidades == 10:
-        pass
+        numero = generar_numero_dies_oportunidades(primerDigito)
     else:
         raise MiErrorPersonalizado()
 
@@ -71,7 +129,6 @@ def seleccionar_formato(cantidad_oportunidades, primerDigito):
 talonario = []
 
 def generar_boletas(cantidad_boletas, cantidad_oportunidades):
-    
     numeros_generados = set()
     id_inicial = 1
     id_final = id_inicial + cantidad_boletas - 1
@@ -80,12 +137,10 @@ def generar_boletas(cantidad_boletas, cantidad_oportunidades):
         boleta = {
             "consecutiva_id": id_boleta,
             "qr_code": "xxx-xxx-xxx-xxx",
-            "numeros": []
         }
         # Generar 8 números de 4 dígitos para cada boleta segun formato
         numeros_boleta = set()
         numeros = list()
-        print("entra 1")
 
         while len(numeros_boleta) < cantidad_oportunidades:
             numero = 0
@@ -99,12 +154,12 @@ def generar_boletas(cantidad_boletas, cantidad_oportunidades):
                 numeros_generados.add(numero)
                 numeros.append(numero)
         # Agregar los números a la boleta
-        boleta["boletas"] = numeros
+        boleta["numeros"] = numeros
         
         talonario.append(boleta)
+    return talonario
 
-
-
+"""
 
 cantidad_boletas = 10
 cantidad_oportunidades = 7
@@ -113,3 +168,4 @@ generar_boletas(cantidad_boletas, cantidad_oportunidades)
 # Imprimir el talonario
 for boleta in talonario:
     print(f"consecutiva_id: {boleta['consecutiva_id']}, qr_code: {boleta['qr_code']}, Boletas: {', '.join(boleta['boletas'])}")
+"""
