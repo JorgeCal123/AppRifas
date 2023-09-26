@@ -39,6 +39,13 @@ class SchemaClientePost(BaseModel):
     direccion : Optional[str]
     notificacion : bool
     
+class SchemaClientePatch(BaseModel):
+    
+    nombre : Optional[str]
+    apellido : Optional[str]
+    celular : Optional[str]
+    direccion : Optional[str]
+    notificacion : Optional[bool]
 
     
 

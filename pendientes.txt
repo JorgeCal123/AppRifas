@@ -1,9 +1,3 @@
-* Req5: mostar las boletas de un cliente la ingresar el numero de telefono
-    (Mejorar este metodo)
-        Cliente:
-        /cliente/{celular}
-
-* Req4: Login Vendedor Administrador (cedula - contraseña)
 
 *Req7: Actualizar informacion de un cliente
 *Req 19-2 modificar la informacion de un cliente
@@ -19,3 +13,4 @@
 *Req18
 
 *Req21
+* Req4: Login Vendedor Administrador (cedula - contraseña)

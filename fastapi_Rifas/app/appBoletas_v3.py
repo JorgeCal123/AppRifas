@@ -126,9 +126,9 @@ def seleccionar_formato(cantidad_oportunidades, primerDigito):
 
     return numero
 
-talonario = []
 
 def generar_boletas(cantidad_boletas, cantidad_oportunidades):
+    talonario = []
     numeros_generados = set()
     id_inicial = 1
     id_final = id_inicial + cantidad_boletas - 1

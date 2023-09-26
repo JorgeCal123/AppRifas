@@ -4,7 +4,7 @@ from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from config.conexion import  get_db
 
-from schema.schema_cliente import SchemaBoleta, SchemaCliente, SchemaClientePost, SchemaClienteGet, SchemaClienteBasic
+from schema.schema_cliente import SchemaBoleta, SchemaCliente, SchemaClientePost, SchemaClienteGet, SchemaClienteBasic, SchemaClientePatch
 from schema.schema_venta_boletas import Schema_Boleta_vendida, SchemaClienteBoletas
 from modelo.modelos import Cliente, Boleta
 import datetime
@@ -60,7 +60,7 @@ def buscar_usuario(celular:str, db: Session = Depends(get_db)):
 
 
   for datos in cliente:
-    schema_Boleta  = getSchemaBoleta(cliente = datos, db=db)
+    schema_Boleta  = getSchemaBoleta(cliente = datos.id, db=db)
     schema_cliente = SchemaClienteGet(
                                       id = datos.id,
                                       nombre = datos.nombre,
@@ -75,7 +75,7 @@ def buscar_usuario(celular:str, db: Session = Depends(get_db)):
 
 
 def getSchemaBoleta(cliente, db):
-    boletas = db.query(Boleta).filter_by(id_cliente = cliente.id).all()
+    boletas = db.query(Boleta).filter_by(id_cliente = cliente).all()
     schema_Boletas = []
     for boleta in boletas:
       numeros = []
@@ -89,3 +89,33 @@ def getSchemaBoleta(cliente, db):
                                    estado_pago=boleta.estado_pagado)
       schema_Boletas.append(schema_boleta)
     return schema_Boletas
+  
+  
+@routerCliente.patch("/cliente/{celular}",
+                   response_model= List[SchemaClienteGet],
+                   tags=["Cliente"],
+                   summary="Actualizar cliente con numero Celular")
+def actualizar_usuario(celular:str, entrada: SchemaClientePatch, db: Session = Depends(get_db)):
+  cliente = db.query(Cliente).filter_by(celular = celular).first()
+  if entrada.nombre is not None:
+    cliente.nombre = entrada.nombre
+  if entrada.apellido is not None:
+    cliente.apellido = entrada.apellido
+  if entrada.celular is not None:
+    cliente.celular = entrada.celular
+  if entrada.direccion is not None:
+    cliente.direccion = entrada.direccion
+  if entrada.notificacion is not None:
+    cliente.notificacion = entrada.notificacion
+
+  cliente_actualizado = SchemaClienteGet(id=cliente.id,
+                                         nombre=cliente.nombre,
+                                         apellido=cliente.apellido,
+                                         celular= cliente.celular,
+                                         direccion= cliente.direccion,
+                                         notificacion=cliente.notificacion,
+                                         boletas=getSchemaBoleta(cliente.id, db),
+
+                                         )
+  db.commit()
+  return 
