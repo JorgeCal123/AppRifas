@@ -88,7 +88,7 @@ def talonario_vendedor(id_talonario:int, db:Session=Depends(get_db)):
 
 
 
-@routerAdmin.post('/admin/cantidadboletasvendedor/{id_talonario}', response_model= List[SchemaBoletasAsignadas], tags=["Administrador"])
+@routerAdmin.post('/admin/cantidadboletasvendedor/{id_talonario}', response_model= List[SchemaBoletasAsignadas], tags=["Administrador"], summary="Asignar boletas a un vendedor")
 def Boletas_asignadas(id_talonario:int, total : int, entrada : List[SchemaCantidadBoletasVendedor], db:Session=Depends(get_db)):   
   total_asignada = reduce((lambda x, y: x + y.cantidad), entrada, 0)
   print(total_asignada)

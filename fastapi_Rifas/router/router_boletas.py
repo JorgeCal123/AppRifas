@@ -47,9 +47,6 @@ def actualizar_Boleta(boleta_id:int, entrada:BoletaActualizar, db:Session=Depend
     return boleta
 
 def guardarBoletas(cantidad_boletas, cantidad_oportunidades, talonario, db):
-    
-    tiempo_inicio = time.time()
-    print("Empieza a contar")
 
     boletas=generar_boletas(cantidad_boletas=cantidad_boletas,cantidad_oportunidades=cantidad_oportunidades)
     for boleta in tqdm(boletas, desc="Procesando valores de la lista"):
@@ -78,13 +75,7 @@ def guardarBoletas(cantidad_boletas, cantidad_oportunidades, talonario, db):
     db.add(talonario)
     db.commit()
     db.refresh(talonario)
-    tiempo_fin = time.time()
-    diferencia_segundos = tiempo_fin - tiempo_inicio
-    minutos = int(diferencia_segundos // 60)
-    segundos = int(diferencia_segundos % 60)
 
-    # Imprimir el tiempo de ejecución
-    print(f"Tiempo de ejecución: {minutos} minutos y {segundos} segundos")
 
 def darListaBoletas(talonario: Talonario):
     listaBoletas= []

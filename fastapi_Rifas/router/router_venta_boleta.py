@@ -3,11 +3,12 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from config.conexion import  get_db
-from datetime import datetime
+import datetime
 
 from schema.schema_venta_boletas import *
-from schema.schema_cliente import SchemaClienteGet
+from schema.schema_cliente import SchemaCliente
 from modelo.modelos import Boleta, Cliente
+
 routerVenta = APIRouter()
 
 
@@ -19,26 +20,29 @@ def registrar_venta_boleta(id_talonaro: int, vendidas:List[SchemaVenta], db: Ses
     nuevo_venta = db.query(Boleta).filter_by(consecutiva_id = boleta.consecutiva_id, id_talonario=id_talonaro).first()
     nuevo_venta.estado_venta = True
     nuevo_venta.estado_pagado = boleta.pagada
-    nuevo_venta.fecha_venta = datetime.now()
+    nuevo_venta.fecha_venta = datetime.datetime.now()
     boleta_vendida = Schema_Boleta_vendida(id=nuevo_venta.id)
     id_boletas.append(boleta_vendida)
     db.commit()
     db.refresh(nuevo_venta)
   return id_boletas
 
+@routerVenta.post("/cliente/boletas/", response_model= SchemaCliente, tags=["Venta de Boletas"])
+def registro_cliente_venta_boletas(cliente:SchemaClienteBoletas, id_talonario:int, db: Session = Depends(get_db)):
 
-@routerVenta.get("/buscar_cliente/{celular}", response_model= List[SchemaClienteGet], tags=["Venta de Boletas"])
-def buscar_usuario(celular:str, db: Session = Depends(get_db)):
-  cliente = db.query(Cliente).filter(Cliente.celular.like(f"%{celular}%")).all()
-  lista_clientes = []
-  for datos in cliente:
-    schema_cliente = SchemaClienteGet(
-                                      id = datos.id,
-                                      nombre = datos.nombre,
-                                      apellido=datos.apellido,
-                                      celular= datos.celular,
-                                      direccion=datos.direccion,
-                                      notificacion= datos.notificacion
-                                      )
-    lista_clientes.append(schema_cliente)
-  return lista_clientes
+  nuevo_cliente = Cliente(nombre = cliente.nombre, apellido = cliente.apellido, celular = cliente.celular, direccion = cliente.direccion, notificacion = cliente.notificacion)
+  for venta_boleta in cliente.venta_boletas:
+    boleta = db.query(Boleta).filter(Boleta.consecutiva_id == venta_boleta.consecutiva_id, Boleta.id_talonario == id_talonario).first()
+    print(venta_boleta.consecutiva_id)
+    if boleta:
+      boleta.estado_venta = True
+      boleta.estado_pagado = venta_boleta.pagada
+      boleta.fecha_venta = datetime.datetime.now()
+
+    nuevo_cliente.boletas.append(boleta)
+
+  db.add(nuevo_cliente)
+  db.commit()
+  db.refresh(nuevo_cliente)
+  respuesta = SchemaCliente(mensaje=f"el cliente {cliente.nombre} registro y venta satisfactoria")
+  return respuesta

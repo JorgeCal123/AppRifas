@@ -20,10 +20,26 @@ app = FastAPI(
     description="""
     Descripcion para el uso de la api de Rifas \n
         Pagina de inicio \n
-    Apis
+    Premios:
+        /juegoSemanal
+        /JuegosPasados
+    Cliente:
+        /cliente/{celular}
     Apis2
     
+        Administrador
+
+    Administrador
+        /admin/opcionesTalonario
+    Vendedor
+        /vendedor  (Post - Registrar)
+
+    Talonario
+        /talonario/ (Post - Crear Talonario)
+    
+    
     """
+
 )
 
 app.include_router(routerAdmin)

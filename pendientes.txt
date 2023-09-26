@@ -1,2 +1,21 @@
-* mostar las boletas de un cliente
-* darle formato a las boletas
+* Req5: mostar las boletas de un cliente la ingresar el numero de telefono
+    (Mejorar este metodo)
+        Cliente:
+        /cliente/{celular}
+
+* Req4: Login Vendedor Administrador (cedula - contraseña)
+
+*Req7: Actualizar informacion de un cliente
+*Req 19-2 modificar la informacion de un cliente
+
+*Req10
+
+*Req11 Mejorar el metodo registrar Vendedor, Falta generarle una constraseña
+
+*Req16 El vendedor debe de poder ver su informacion al logearse
+
+* EL vendedor debe de poder modificar su informacion (Contraseña)
+
+*Req18
+
+*Req21
