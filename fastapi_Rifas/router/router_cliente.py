@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from config.conexion import  get_db
@@ -91,12 +91,14 @@ def getSchemaBoleta(cliente, db):
     return schema_Boletas
   
   
-@routerCliente.patch("/cliente/{celular}",
-                   response_model= List[SchemaClienteGet],
+@routerCliente.put("/cliente/{celular}",
                    tags=["Cliente"],
-                   summary="Actualizar cliente con numero Celular")
+                   summary="Actualizar cliente con numero Celular xd")
 def actualizar_usuario(celular:str, entrada: SchemaClientePatch, db: Session = Depends(get_db)):
   cliente = db.query(Cliente).filter_by(celular = celular).first()
+  if not cliente:
+    raise HTTPException(status_code=404, detail="Cliente no encontrado")
+
   if entrada.nombre is not None:
     cliente.nombre = entrada.nombre
   if entrada.apellido is not None:
@@ -107,15 +109,13 @@ def actualizar_usuario(celular:str, entrada: SchemaClientePatch, db: Session = D
     cliente.direccion = entrada.direccion
   if entrada.notificacion is not None:
     cliente.notificacion = entrada.notificacion
-
+  
   cliente_actualizado = SchemaClienteGet(id=cliente.id,
                                          nombre=cliente.nombre,
                                          apellido=cliente.apellido,
                                          celular= cliente.celular,
                                          direccion= cliente.direccion,
                                          notificacion=cliente.notificacion,
-                                         boletas=getSchemaBoleta(cliente.id, db),
+                                         boletas=getSchemaBoleta(cliente.id, db))
 
-                                         )
-  db.commit()
-  return 
+  return cliente_actualizado
