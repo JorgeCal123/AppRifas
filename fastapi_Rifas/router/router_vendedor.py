@@ -31,3 +31,32 @@ def registrar_vendedor(vendedor:SchemaVendedorPost, db: Session = Depends(get_db
   db.commit()
   db.refresh(nuevo_vendedor)
   return respuesta
+
+
+@routerVendedor.put("/vendedor/{cedula}", tags=["Vendedor"])
+def actualizar_vendedor(vendedor:SchemaVendedorPut, cedula:str,  db: Session = Depends(get_db)):
+  objeto_vendedor = db.query(Vendedor).filter_by(cedula = cedula).first()
+  if vendedor.cedula is not None:
+    objeto_vendedor.cedula= vendedor.cedula
+  if vendedor.nombre is not None:
+    objeto_vendedor.nombre = vendedor.nombre
+  if vendedor.apellido is not None:
+    objeto_vendedor.apellido = vendedor.apellido
+  if vendedor.celular is not None:
+    objeto_vendedor.celular = vendedor.celular
+  if vendedor.correo is not None:
+    objeto_vendedor.correo = vendedor.correo
+  db.commit()
+  respuesta = SchemaVendedorGet(cedula=objeto_vendedor.cedula,
+                                nombre=objeto_vendedor.nombre,
+                                apellido=objeto_vendedor.apellido,
+                                celular=objeto_vendedor.celular,
+                                correo=objeto_vendedor.correo
+                                )
+  return respuesta
+
+@routerVendedor.patch("/vendedor/{cedula}", tags=["Vendedor"])
+def actualizar_vendedor(vendedor:SchemaVendedorPut, cedula:str,  db: Session = Depends(get_db)):
+  db.query(Vendedor).filter_by(cedula = cedula).update(vendedor.model_dump(exclude_unset=True))
+  db.commit()
+  return {"mensaje": "sea actualizo"}

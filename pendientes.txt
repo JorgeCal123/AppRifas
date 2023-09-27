@@ -1,6 +1,4 @@
 
-*Req7: Actualizar informacion de un cliente
-*Req 19-2 modificar la informacion de un cliente
 
 *Req10
 
