@@ -12,3 +12,5 @@
 
 *Req21
 * Req4: Login Vendedor Administrador (cedula - contraseña)
+
+*Guardar boletas de vendedor borrado y poder reasignar a otro vendedor, simepre y cuando las boletas esten activas

@@ -3,6 +3,7 @@ from config.conexion import Base, get_db
 
 from sqlalchemy.schema import ForeignKey
 from sqlalchemy.orm import relationship
+
 import random
 
 
@@ -121,3 +122,8 @@ class Vendedor(Base):
     contraseña = Column(String(20))
     
     boletas = relationship("Boleta", back_populates='vendedor', cascade="all, delete-orphan")
+
+class RemuneracionVendedor(Base):
+    __tablename__ = 'remuneracion_vendedores'
+    valor_boleta = Column(Integer, primary_key=True)
+    porcentaje = Column(Integer)

@@ -31,6 +31,5 @@ class SchemaVentasVendedor(BaseModel):
   
 class SchemaTalonarioVentasVendedor(BaseModel):
     
-  premio: str
   talonario_id : int
   ventas_vendedor: list[SchemaVentasVendedor]

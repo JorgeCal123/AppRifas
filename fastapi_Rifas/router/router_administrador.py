@@ -1,14 +1,13 @@
 from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
-from sqlalchemy import asc
+from sqlalchemy import asc, func, case, text, cast, Integer, String, Float
 from config.conexion import  get_db
 from schema.schema_talonario import *
 from schema.schema_vendedor import *
 from modelo.modelos import *
 from fastapi import HTTPException
 from functools import reduce
-
 
 
 routerAdmin= APIRouter()
@@ -120,5 +119,64 @@ def guardar_boletas_vendedor(id_talonario, vendedores, db):
     db.add(vendedor)
     db.commit()
     db.refresh(vendedor)
-    
 
+
+@routerAdmin.post('/config/porcentajeremuneracion/', tags=["Administrador"], summary="Asigna el porentaje que se le paga a un vendedor")
+def Boletas_asignadas(entrada : List[SchemaPorcentajeVendedor], db:Session=Depends(get_db)):
+  for remuneracion in entrada:
+    porcentaje = RemuneracionVendedor(**remuneracion.model_dump())
+    db.add(porcentaje)
+    db.commit()
+    db.refresh(porcentaje)
+  return entrada
+"""
+[
+  {
+    "valor_boleta": "2000",
+    "porcentaje": 30
+  },
+  {
+    "valor_boleta": 3000,
+    "porcentaje": 30
+  },
+  {
+    "valor_boleta": 5000,
+    "porcentaje": 25
+  },
+  {
+    "valor_boleta": 10000,
+    "porcentaje": 30
+  },
+  {
+    "valor_boleta": 20000,
+    "porcentaje": 30
+  }
+]
+"""
+
+@routerAdmin.patch("/config/porcentajeremuneracion/", tags=["Administrador"])
+def actualizar_vendedor(vendedor:SchemaPorcentajeVendedor, db: Session = Depends(get_db)):
+  db.query(RemuneracionVendedor).filter_by(valor_boleta = vendedor.valor_boleta).update(vendedor.model_dump())
+  db.commit()
+  return vendedor.model_dump()
+
+@routerAdmin.get("/ventas/vendedor/", tags=["Administrador"])
+def ventas_vendedor(db: Session = Depends(get_db)):
+  ventas = db.query(
+    Talonario.id,
+    Vendedor.cedula,
+    Vendedor.nombre,
+    func.count(Boleta.id).label('cantidad'),
+    func.sum(case([(Boleta.estado_venta == True, 1)], else_=0)).label('cantidad_vendidas'),
+    Talonario.valor_boleta.label('precio'),
+    func.sum(case([(Boleta.estado_venta == True, Talonario.valor_boleta)], else_=0)).label('total_venta'),
+    func.sum(case([(Boleta.estado_venta == True, Talonario.valor_boleta)], else_=0)) *
+    (RemuneracionVendedor.porcentaje / 100).label('pago'),
+    func.concat(cast(func.min(Boleta.consecutiva_id), String), ' - ', cast(func.max(Boleta.consecutiva_id), String)).label('rango_min')
+    ).join(Vendedor, Vendedor.cedula == Boleta.id_vendedor).right_join(Talonario, Talonario.id ==   Boleta.id_talonario).join(RemuneracionVendedor, RemuneracionVendedor.valor_boleta == Talonario.valor_boleta).group_by(Talonario.id, Vendedor.cedula)
+  
+  results = ventas.all()
+# Procesar los resultados como desees
+  for row in results:
+    print(row)
+  return({"mensaje": "funciona"})

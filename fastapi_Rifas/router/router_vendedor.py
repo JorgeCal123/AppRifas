@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from config.conexion import  get_db
 
 from schema.schema_vendedor import *
-from modelo.modelos import Vendedor
+from modelo.modelos import Vendedor, RemuneracionVendedor
 
 routerVendedor = APIRouter()
 
@@ -57,7 +57,7 @@ def actualizar_vendedor(vendedor:SchemaVendedorPut, cedula:str,  db: Session = D
 
 @routerVendedor.patch("/vendedor/{cedula}", tags=["Vendedor"])
 def actualizar_vendedor(vendedor:SchemaVendedorPut, cedula:str,  db: Session = Depends(get_db)):
-  db.query(Vendedor).filter_by(cedula = cedula).update(vendedor.model_dump(exclude_unset=True))
+  db.query(RemuneracionVendedor).filter_by(valor_boleta = cedula).update(vendedor.model_dump(exclude_unset=True))
   db.commit()
   return {"mensaje": "sea actualizo"}
 
