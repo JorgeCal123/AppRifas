@@ -120,3 +120,5 @@ def guardar_boletas_vendedor(id_talonario, vendedores, db):
     db.add(vendedor)
     db.commit()
     db.refresh(vendedor)
+    
+

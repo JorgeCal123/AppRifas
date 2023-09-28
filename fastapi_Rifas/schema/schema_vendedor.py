@@ -14,7 +14,7 @@ class SchemaVendedorPost(BaseModel):
 
 
 class SchemaVendedorGet(BaseModel):
-    cedula : int
+    cedula : str
     nombre : str
     apellido : str
     celular : str

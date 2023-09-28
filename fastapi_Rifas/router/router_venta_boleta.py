@@ -46,3 +46,13 @@ def registro_cliente_venta_boletas(cliente:SchemaClienteBoletas, id_talonario:in
   db.refresh(nuevo_cliente)
   respuesta = SchemaCliente(mensaje=f"el cliente {cliente.nombre} registro y venta satisfactoria")
   return respuesta
+
+
+@routerVenta.get("/vendedor/boletas/", response_model= list[SchemaTalonarioVentasVendedor], tags=["Venta de Boletas"])
+def reporte_venta_boletas(db: Session = Depends(get_db)):
+
+
+  """
+  select vendedor.nombre, boleta.estado_venta, talonario.valor_boleta, talonario.id, vendedor.cedula, premio.premio  
+  on id_vendedor= vendedor.cedula
+  """

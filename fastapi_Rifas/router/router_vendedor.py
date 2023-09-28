@@ -60,3 +60,11 @@ def actualizar_vendedor(vendedor:SchemaVendedorPut, cedula:str,  db: Session = D
   db.query(Vendedor).filter_by(cedula = cedula).update(vendedor.model_dump(exclude_unset=True))
   db.commit()
   return {"mensaje": "sea actualizo"}
+
+
+@routerVendedor.delete("/vendedor/{cedula}", tags=["Vendedor"])
+def actualizar_vendedor(cedula:str,  db: Session = Depends(get_db)):
+  vendedor = db.query(Vendedor).filter_by(cedula = cedula).first()
+  db.delete(vendedor)
+  db.commit()
+  return {"mensaje": f"el vendedor con cedula {cedula} se ha eliminado"}
