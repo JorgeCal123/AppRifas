@@ -41,3 +41,7 @@ class SchemaVendedorPut(BaseModel):
     apellido : Optional[str] = None
     celular : Optional[str] = None
     correo : Optional[str] = None
+
+class SchemaPorcentajeVendedor(BaseModel):
+    valor_boleta : int
+    porcentaje : int

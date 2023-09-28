@@ -120,3 +120,43 @@ def guardar_boletas_vendedor(id_talonario, vendedores, db):
     db.add(vendedor)
     db.commit()
     db.refresh(vendedor)
+
+
+@routerAdmin.post('/config/porcentajeremuneracion/', tags=["Administrador"], summary="Asigna el porentaje que se le paga a un vendedor")
+def Boletas_asignadas(entrada : List[SchemaPorcentajeVendedor], db:Session=Depends(get_db)):
+  for remuneracion in entrada:
+    porcentaje = RemuneracionVendedor(**remuneracion.model_dump())
+    db.add(porcentaje)
+    db.commit()
+    db.refresh(porcentaje)
+  return entrada
+"""
+[
+  {
+    "valor_boleta": "2000",
+    "porcentaje": 30
+  },
+  {
+    "valor_boleta": 3000,
+    "porcentaje": 30
+  },
+  {
+    "valor_boleta": 5000,
+    "porcentaje": 25
+  },
+  {
+    "valor_boleta": 10000,
+    "porcentaje": 30
+  },
+  {
+    "valor_boleta": 20000,
+    "porcentaje": 30
+  }
+]
+"""
+
+@routerAdmin.patch("/config/porcentajeremuneracion/", tags=["Administrador"])
+def actualizar_vendedor(vendedor:SchemaPorcentajeVendedor, db: Session = Depends(get_db)):
+  db.query(RemuneracionVendedor).filter_by(valor_boleta = vendedor.valor_boleta).update(vendedor.model_dump())
+  db.commit()
+  return vendedor.model_dump()
