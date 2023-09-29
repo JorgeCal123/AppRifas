@@ -21,15 +21,16 @@ class SchemaClienteBoletas(BaseModel):
     
 class SchemaVentasVendedor(BaseModel):
 
-  nombre_vendedor: str
-  cantidad_boletas_asignadas: int
-  cantidad_boletas_vendidas: int
-  precio_unitario: int
-  total_ventas: int
-  pago: int
-  rango_asignado: str
+  nombre_vendedor: Optional[str] = None
+  cantidad_boletas_asignadas: Optional[int] = None
+  cantidad_boletas_vendidas: Optional[int] = None
+  precio_unitario: Optional[int] = None
+  total_ventas: Optional[int] = None
+  pago: Optional[int] = None
+  rango_asignado: Optional[str] = None
   
 class SchemaTalonarioVentasVendedor(BaseModel):
     
   talonario_id : int
-  ventas_vendedor: list[SchemaVentasVendedor]
+  fecha_juego: str
+  ventas_vendedor: Optional[List[SchemaVentasVendedor]]

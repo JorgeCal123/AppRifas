@@ -48,7 +48,7 @@ def registro_cliente_venta_boletas(cliente:SchemaClienteBoletas, id_talonario:in
   return respuesta
 
 
-@routerVenta.get("/vendedor/boletas/", response_model= list[SchemaTalonarioVentasVendedor], tags=["Venta de Boletas"])
+@routerVenta.get("/vendedor/boletas/", response_model= List[SchemaTalonarioVentasVendedor], tags=["Venta de Boletas"])
 def reporte_venta_boletas(db: Session = Depends(get_db)):
 
 
