@@ -15,6 +15,8 @@ import datetime
 from app.fechas_semana import obtener_fechas_lunes_a_domingo
 from fastapi.openapi.models import Info
 
+from fastapi.middleware.cors import CORSMiddleware
+
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI(
     description="""
@@ -41,9 +43,8 @@ app = FastAPI(
     """
 
 )
-
-app.include_router(routerAdmin)
 app.include_router(routerTalonario)
+app.include_router(routerAdmin)
 app.include_router(routerVendedor)
 app.include_router(routerVenta)
 
@@ -52,7 +53,13 @@ app.include_router(routerGanadoras)
 app.include_router(routerPremios)
 app.include_router(routerCliente)
 
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200"],  # Cambia esto si usas otro dominio
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 if __name__== "__main__":
     print(obtener_fechas_lunes_a_domingo())
     uvicorn.run("main:app", port=8000, reload=True)

@@ -46,7 +46,15 @@ def actualizar_Boleta(boleta_id:int, entrada:BoletaActualizar, db:Session=Depend
     db.refresh(boleta)
     return boleta
 
+
+"""
+     metodo guardar boleta que recibe por parametro:
+
+"""
 def guardarBoletas(cantidad_boletas, cantidad_oportunidades, talonario, db):
+    print(cantidad_boletas)
+    print(cantidad_oportunidades)
+    print(talonario)
 
     boletas=generar_boletas(cantidad_boletas=cantidad_boletas,cantidad_oportunidades=cantidad_oportunidades)
     for boleta in tqdm(boletas, desc="Procesando valores de la lista"):
@@ -79,6 +87,26 @@ def guardarBoletas(cantidad_boletas, cantidad_oportunidades, talonario, db):
 
 def darListaBoletas(talonario: Talonario):
     listaBoletas= []
+    for boleta in talonario.boletas:
+        listanumeros= []
+        for num in boleta.numeros:
+            listanumeros.append(num.numero)
+        schemaboleta= SchemaBoleta(
+            id = boleta.id,
+            id_talonario= boleta.id_talonario,
+            consecutiva_id= boleta.consecutiva_id,
+            qr_code=boleta.qr_code,
+            estado_venta=boleta.estado_venta,
+            estado_pagado=boleta.estado_pagado,
+            numeros = listanumeros)
+        listaBoletas.append(schemaboleta)
+    return listaBoletas
+
+
+def buscarBoleta_X_Numero(talonario: Talonario, numero_boleta: str, db:Session=Depends(get_db)):
+    Boleta= SchemaBoleta()
+    boleta = db.query(Boleta).filter_by(id=boleta_id).first()
+
     for boleta in talonario.boletas:
         listanumeros= []
         for num in boleta.numeros:

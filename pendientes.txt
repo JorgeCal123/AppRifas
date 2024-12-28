@@ -14,3 +14,10 @@
 * Req4: Login Vendedor Administrador (cedula - contraseña)
 
 *Guardar boletas de vendedor borrado y poder reasignar a otro vendedor, simepre y cuando las boletas esten activas
+
+
+
+Tests
+
+1.
+    Falta controlar el error de registrar a un vendedor que la cedula no este repetida: (cedula, correo y celular)
